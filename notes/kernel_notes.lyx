@@ -1,0 +1,741 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+theorems-ams-bytype
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+RKHS reading group: Notes
+\end_layout
+
+\begin_layout Section
+Integral operator and covariance operator
+\end_layout
+
+\begin_layout Definition
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[
+\end_layout
+
+\end_inset
+
+Integral operator
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+]
+\end_layout
+
+\end_inset
+
+
+\emph on
+ 
+\emph default
+Let 
+\begin_inset Formula $k$
+\end_inset
+
+ be a continuous kernel on a compact metric space 
+\begin_inset Formula $\mathcal{X}$
+\end_inset
+
+, and let 
+\begin_inset Formula $\nu$
+\end_inset
+
+ be a finite Borel measure on 
+\begin_inset Formula $\mathcal{X}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $S_{k}$
+\end_inset
+
+ be the 
+\begin_inset Quotes eld
+\end_inset
+
+convolution
+\begin_inset Quotes erd
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+S_{k}\,:\,L_{2}(\mathcal{X};\nu) & \to & \mathcal{H}_{k},\\
+\left(S_{k}f\right)\left(x\right) & = & \left\langle f,I_{k}k(x,\cdot)\right\rangle _{L_{2}(\mathcal{X};\nu)}\\
+ & = & \int k(x,y)f(y)d\nu(y),\;\;f\in L_{2}(\mathcal{X};\nu),
+\end{eqnarray*}
+
+\end_inset
+
+and 
+\begin_inset Formula $T_{k}=I_{k}S_{k}$
+\end_inset
+
+ its composition with the inclusion 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $I_{k}\,:\,\mathcal{H}_{k}\hookrightarrow L_{2}(\mathcal{X};\nu)$
+\end_inset
+
+.
+ 
+\begin_inset Formula $T_{k}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ is said to be the 
+\emph on
+integral operator
+\emph default
+ of kernel 
+\begin_inset Formula $k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To see that this definition is well posed, i.e.
+ that 
+\begin_inset Formula $\text{im}(S_{k})\subset\mathcal{H}_{k}$
+\end_inset
+
+, use the same arguments as in the section on cross-covariance operators
+ below.
+ 
+\end_layout
+
+\begin_layout Fact
+\begin_inset Formula $I_{k}=S_{k}^{*}$
+\end_inset
+
+.
+ In particular, 
+\begin_inset Formula $T_{k}=S_{k}^{*}S_{k}$
+\end_inset
+
+ is self-adjoint.
+\end_layout
+
+\begin_layout Proof
+Follows from
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\langle h,S_{k}f\right\rangle _{\mathcal{H}_{k}} & = & \left\langle h,\int k(\cdot,y)f(y)d\nu(y)\right\rangle _{\mathcal{H}_{k}}\\
+ & = & \int\left\langle h,k(\cdot,y)\right\rangle _{\mathcal{H}_{k}}f(y)d\nu(y)\\
+ & = & \int h(y)f(y)d\nu(y)\\
+ & = & \left\langle I_{k}h,f\right\rangle _{L_{2}(\mathcal{X};\nu)}.
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[
+\end_layout
+
+\end_inset
+
+Covariance operator
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+]
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $C_{\nu}=S_{k}S_{k}^{*}$
+\end_inset
+
+ is the (uncentred) covariance operator of 
+\begin_inset Formula $\nu$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Fact
+\begin_inset Formula $\left\langle h,C_{\nu}g\right\rangle _{\mathcal{H}_{k}}=\left\langle h,S_{k}S_{k}^{*}g\right\rangle _{\mathcal{H}_{k}}=\left\langle I_{k}h,I_{k}g\right\rangle _{\mathcal{H}_{k}}=\int h(x)g(x)d\nu(x)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Even though 
+\begin_inset Formula $C_{\nu}$
+\end_inset
+
+ and 
+\begin_inset Formula $T_{k}$
+\end_inset
+
+ differ only in the order of taking inclusions (which seems irrelevant at
+ first sight), they can be different objects in general!
+\end_layout
+
+\begin_layout Example
+If 
+\begin_inset Formula $\nu$
+\end_inset
+
+ is a probability measure and 
+\begin_inset Formula $\mathcal{X}\subset\mathbb{R}^{p}$
+\end_inset
+
+, this is just like a (linear, uncentred) covariance matrix 
+\begin_inset Formula $C_{\nu}=\mathbb{E}_{X\sim\nu}\left[XX^{\top}\right]$
+\end_inset
+
+ of a random vector 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ If we consider covariance between scalar projections of 
+\begin_inset Formula $X$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathbb{E}\left[\left(a^{\top}X\right)\left(b^{\top}X\right)\right] & = & a^{\top}C_{\nu}b.
+\end{eqnarray*}
+
+\end_inset
+
+Indeed, for a linear kernel, 
+\begin_inset Formula $\mathcal{H}_{k}$
+\end_inset
+
+ is the set of linear functionals on 
+\begin_inset Formula $\mathcal{X}$
+\end_inset
+
+ and can be identified with 
+\begin_inset Formula $\mathbb{R}^{p}$
+\end_inset
+
+ and 
+\begin_inset Formula $C_{\nu}:\mathbb{R}^{p}\to\mathbb{R}^{p}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $T_{k}$
+\end_inset
+
+ is a different object though: to every 
+\begin_inset Formula $f\in L_{2}(\mathcal{X};\nu)$
+\end_inset
+
+, it associates a linear functional 
+\begin_inset Formula $x\mapsto\left(\int yf(y)d\nu(y)\right)^{\top}x$
+\end_inset
+
+.
+ Notice that eigenfunctions of 
+\begin_inset Formula $T_{k}$
+\end_inset
+
+ in this case must be linear, so 
+\begin_inset Formula $f(y)=a^{\top}y$
+\end_inset
+
+ for some 
+\begin_inset Formula $a\in\mathbb{R}^{p}$
+\end_inset
+
+, so eigenvalue equation reads
+\begin_inset Formula 
+\begin{eqnarray*}
+\int ya^{\top}yd\nu(y) & = & \lambda a\quad\Leftrightarrow\\
+C_{\nu}a & = & \lambda a.
+\end{eqnarray*}
+
+\end_inset
+
+Thus, even though 
+\begin_inset Formula $T_{k}$
+\end_inset
+
+ is nominally an operator on 
+\begin_inset Formula $L_{2}$
+\end_inset
+
+ it has at most 
+\begin_inset Formula $p$
+\end_inset
+
+ non-zero eigenvalues (which are the same as the eigenvalues of 
+\begin_inset Formula $C_{\nu}$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Section
+Cross-covariance operator
+\end_layout
+
+\begin_layout Standard
+Let's take 
+\begin_inset Formula $\mathcal{F}=L^{2}(\mathcal{X}\times\mathcal{Y},P_{XY})$
+\end_inset
+
+, for some joint distribution 
+\begin_inset Formula $P_{XY}$
+\end_inset
+
+ on 
+\begin_inset Formula $\mathcal{X}\times\mathcal{Y}$
+\end_inset
+
+.
+ Further, assume that 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $l_{y}\doteq l(y,\cdot)\in\mathcal{F}$
+\end_inset
+
+, and 
+\begin_inset Formula $k_{x}\doteq k(x,\cdot)\in\mathcal{F}$
+\end_inset
+
+, i.e., that:
+\begin_inset Formula 
+\begin{eqnarray*}
+\int l^{2}(y,\tilde{y})dP_{XY}(\tilde{x},\tilde{y}) & = & \int l^{2}(y,\tilde{y})dP_{Y}(\tilde{y})\\
+ & < & \infty,
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula 
+\begin{eqnarray*}
+\int k^{2}(x,\tilde{x})dP_{XY}(\tilde{x},\tilde{y}) & = & \int k^{2}(x,\tilde{x})dP_{X}(\tilde{x})\\
+ & < & \infty.
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Denote 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+by
+\begin_inset Formula $\iota_{k}:\mathcal{H}_{k}\to L^{2}(\mathcal{X}\times\mathcal{Y},P_{XY})$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+and 
+\begin_inset Formula $\iota_{l}:\mathcal{H}_{l}\to L^{2}(\mathcal{X}\times\mathcal{Y},P_{XY})$
+\end_inset
+
+ inclusions of the respective RKHSs into 
+\begin_inset Formula $\mathcal{F}$
+\end_inset
+
+.
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ Consider 
+\begin_inset Formula $R_{l}\;:\;L^{2}(\mathcal{X}\times\mathcal{Y},P_{XY})\to\mathbb{R}^{\mathcal{Y}}$
+\end_inset
+
+, given by
+\begin_inset Formula 
+\begin{eqnarray*}
+(R_{l}f)(y) & = & \left\langle f,\iota_{l}l_{y}\right\rangle _{\mathcal{F}}\\
+ & = & \int f(\tilde{x},\tilde{y})l(\tilde{y},y)dP_{XY}(\tilde{x},\tilde{y}),
+\end{eqnarray*}
+
+\end_inset
+
+and similarly for 
+\begin_inset Formula $R_{k}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+Let us show that 
+\begin_inset Formula $\textrm{im}(R_{l})$
+\end_inset
+
+ is inside 
+\begin_inset Formula $\mathcal{H}_{l}$
+\end_inset
+
+ (similarly, 
+\begin_inset Formula $\textrm{im}(R_{k})$
+\end_inset
+
+ is inside 
+\begin_inset Formula $\mathcal{H}_{k}$
+\end_inset
+
+).
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+First, function 
+\begin_inset Formula $(x,y)\mapsto f(x,y)l_{y}$
+\end_inset
+
+ is Bochner 
+\begin_inset Formula $P_{XY}$
+\end_inset
+
+-integrable on 
+\begin_inset Formula $\mathcal{H}_{l}$
+\end_inset
+
+, since:
+\begin_inset Formula 
+\begin{eqnarray*}
+\int\left\Vert f(x,y)l_{y}\right\Vert _{\mathcal{H}_{l}}dP_{XY}(x,y) & = & \int f(x,y)\sqrt{l(y,y)}dP_{XY}(x,y)\\
+ & \leq & \left\Vert f\right\Vert _{L^{2}}\left[\int l(y,y)dP_{Y}(y)\right]^{1/2}\\
+ & < & \infty.
+\end{eqnarray*}
+
+\end_inset
+
+Second, the evaluation functional 
+\begin_inset Formula $\delta_{y'}:\mathcal{H}_{l}\to\mathbb{R}$
+\end_inset
+
+ is bounded, so it commutes with the Bochner integral, i.e., 
+\begin_inset Formula 
+\begin{eqnarray*}
+(R_{l}f)(y') & = & \int\delta_{y'}\left[f(x,y)l_{y}\right]dP_{XY}(x,y)\\
+ & = & \delta_{y'}\left[\int f(y)l_{y}dP_{XY}(x,y)\right],
+\end{eqnarray*}
+
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+so that 
+\begin_inset Formula $R_{l}f=\int f(x,y)l_{y}dP_{XY}(x,y)\in\mathcal{H}_{l}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Let us show that 
+\begin_inset Formula $R_{l}^{*}$
+\end_inset
+
+ is the inclusion 
+\begin_inset Formula $\iota_{l}$
+\end_inset
+
+.
+ For all 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $h\in\mathcal{H}_{l}$
+\end_inset
+
+, 
+\begin_inset Formula $u\mapsto\left\langle h,u\right\rangle _{\mathcal{H}_{l}}$
+\end_inset
+
+ is a bounded linear operator, and thus: 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\langle h,R_{l}f\right\rangle _{\mathcal{H}_{l}} & = & \left\langle h,\int f(x,y)l_{y}dP_{XY}(x,y)\right\rangle _{\mathcal{H}_{l}}\\
+ & = & \int f(x,y)\left\langle h,l_{y}\right\rangle _{\mathcal{H}_{k}}dP_{XY}(x,y)\\
+ & = & \int f(x,y)h(y)dP(y)\\
+ & = & \left\langle \iota_{l}h,f\right\rangle _{\mathcal{F}}.
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Thereby, we get the cross-covariance operators 
+\begin_inset Formula $C_{YX}=R_{l}R_{k}^{*}\,:\,\mathcal{H}_{k}\to\mathcal{H}_{l},$
+\end_inset
+
+ and 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $C_{XY}=R_{k}R_{l}^{*}\,:\,\mathcal{H}_{l}\to\mathcal{H}_{k}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+.
+ By construction, 
+\begin_inset Formula $C_{YX}=C_{XY}^{*}$
+\end_inset
+
+.
+ Now,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\left\langle g,C_{YX}f\right\rangle _{\mathcal{H}_{l}} & = & \left\langle g,R_{l}\iota_{X}f\right\rangle _{\mathcal{H}_{l}}\\
+ & = & \left\langle \iota_{Y}g,\iota_{X}f\right\rangle _{\mathcal{F}}\\
+ & = & \int f(x)g(y)dP_{XY}(x,y)\\
+ & = & \mathbb{E}_{X,Y}\left[f(X)g(Y)\right].
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
