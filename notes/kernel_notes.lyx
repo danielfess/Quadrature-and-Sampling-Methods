@@ -1282,13 +1282,13 @@ is an importance sampling estimator of
 \noun off
 \color none
 
-\begin_inset Formula $f=\int\psi(\cdot,x)g(x)d\rho(x)=\mathcal{T}_{k}^{-1/2}\mu_{k,g}$
+\begin_inset Formula $f_{k,g}=\int\psi(\cdot,x)g(x)d\rho(x)=\mathcal{T}_{k}^{-1/2}\mu_{k,g}$
 \end_inset
 
  is
 \begin_inset Formula 
 \begin{eqnarray*}
-\Phi^{*}f & = & \left(q\left(x_{i}\right)^{-1/2}\left\langle \psi\left(\cdot,x_{i}\right),f\right\rangle _{\LL}\right)_{i=1}^{n}\\
+\Phi^{*}f_{k,g} & = & \left(q\left(x_{i}\right)^{-1/2}\left\langle \psi\left(\cdot,x_{i}\right),f_{k,g}\right\rangle _{\LL}\right)_{i=1}^{n}\\
  & = & \left(q\left(x_{i}\right)^{-1/2}\left\langle \mathcal{T}_{k}^{-1/2}k\left(\cdot,x_{i}\right),\mathcal{T}_{k}^{-1/2}\mu_{k,g}\right\rangle _{\LL}\right)_{i=1}^{n}\\
  & = & \left(q\left(x_{i}\right)^{-1/2}\left\langle k\left(\cdot,x_{i}\right),\mu_{k,g}\right\rangle _{\Hk}\right)_{i=1}^{n}\\
  & = & \left(q\left(x_{i}\right)^{-1/2}\mukg\left(x_{i}\right)\right)_{i=1}^{n}.
@@ -1364,24 +1364,92 @@ reference "eq:alpha_opt"
 
 with solution
 \begin_inset Formula 
-\begin{equation}
-\beta=\left(\tilde{K}_{q}+n\lambda I\right)^{-1}\left(q\left(x_{i}\right)^{-1/2}\mukg\left(x_{i}\right)\right)_{i=1}^{n}=\left(\Phi^{*}\Phi+n\lambda I\right)^{-1}\Phi^{*}\mathcal{T}_{k}^{-1/2}\mu_{k,g}.
-\end{equation}
-
-\end_inset
-
-At optimality,
-\begin_inset Formula 
 \begin{eqnarray*}
-\left\Vert \sum_{i=1}^{n}\frac{\beta_{i}}{\sqrt{q(x_{i})}}k(\cdot,x_{i})-\mu_{k,g}\right\Vert _{\mathcal{H}_{k}}^{2} & = & \left\Vert \sum_{i=1}^{n}\frac{\beta_{i}}{\sqrt{q(x_{i})}}\psi(\cdot,x_{i})-\mathcal{T}_{k}^{-1/2}\mu_{k,g}\right\Vert _{\LL}^{2}\\
- & = & \left\Vert \Phi\beta-\mathcal{T}_{k}^{-1/2}\mu_{k,g}\right\Vert _{\LL}^{2}\\
- & = & \left\Vert \hat{T}_{k}\left(\hat{T}_{k}+\lambda I\right)^{-1}\mathcal{T}_{k}^{-1/2}\mu_{k,g}-\mathcal{T}_{k}^{-1/2}\mu_{k,g}\right\Vert _{\LL}^{2}\\
- & = & \left\Vert \mathcal{T}_{k}^{1/2}\hat{T}_{k}\left(\hat{T}_{k}+\lambda I\right)^{-1}\mathcal{T}_{k}^{-1/2}\mukg-\mukg\right\Vert _{\Hk}^{2}.
+\beta & = & \left(\tilde{K}_{q}+n\lambda I\right)^{-1}\left(q\left(x_{i}\right)^{-1/2}\mukg\left(x_{i}\right)\right)_{i=1}^{n}\\
+ & = & \left(\Phi^{*}\Phi+n\lambda I\right)^{-1}\Phi^{*}f_{k,g}\\
+ & = & \frac{1}{n}\Phi^{*}\left(\hat{T}_{k}+\lambda I\right)^{-1}f_{k,g}.
 \end{eqnarray*}
 
 \end_inset
 
+where we set 
+\begin_inset Formula $f_{k,g}=\mathcal{T}_{k}^{-1/2}\mu_{k,g}$
+\end_inset
 
+.
+ 
+\end_layout
+
+\begin_layout Standard
+At optimality,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\left\Vert \sum_{i=1}^{n}\frac{\beta_{i}}{\sqrt{q(x_{i})}}k(\cdot,x_{i})-\mu_{k,g}\right\Vert _{\mathcal{H}_{k}}^{2} & = & \left\Vert \sum_{i=1}^{n}\frac{\beta_{i}}{\sqrt{q(x_{i})}}\psi(\cdot,x_{i})-\mathcal{T}_{k}^{-1/2}\mu_{k,g}\right\Vert _{\LL}^{2}\nonumber \\
+ & = & \left\Vert \Phi\beta-f_{k,g}\right\Vert _{\LL}^{2}\nonumber \\
+ & = & \left\Vert \left(\hat{T}_{k}\left(\hat{T}_{k}+\lambda I\right)^{-1}-I\right)f_{k,g}\right\Vert _{\LL}^{2}\nonumber \\
+ & = & \lambda^{2}\left\Vert \left(\hat{T}_{k}+\lambda I\right)^{-1}f_{k,g}\right\Vert _{\LL}^{2}.\nonumber \\
+ & = & \lambda\left\langle f_{k,g},\lambda\left(\hat{T}_{k}+\lambda I\right)^{-2}f_{k,g}\right\rangle _{\LL}.\label{eq: error_term_bound}
+\end{eqnarray}
+
+\end_inset
+
+Moreover:
+\begin_inset Formula 
+\begin{eqnarray}
+n\lambda\left\Vert \beta\right\Vert _{2}^{2} & = & n\lambda\left\langle \frac{1}{n}\Phi^{*}\left(\hat{T}_{k}+\lambda I\right)^{-1}f_{k,g},\frac{1}{n}\Phi^{*}\left(\hat{T}_{k}+\lambda I\right)^{-1}f_{k,g}\right\rangle _{\mathbb{R}^{n}}\nonumber \\
+ & = & \lambda\left\langle f_{k,g},\left(\hat{T}_{k}+\lambda I\right)^{-1}\hat{T}_{k}\left(\hat{T}_{k}+\lambda I\right)^{-1}f_{k,g}\right\rangle _{\LL}.\label{eq: beta_term_bound}
+\end{eqnarray}
+
+\end_inset
+
+Now, operators inside both inner products 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq: error_term_bound"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq: beta_term_bound"
+
+\end_inset
+
+ are 
+\begin_inset Formula $\preceq\left(\hat{T}_{k}+\lambda I\right)^{-1}$
+\end_inset
+
+.To see this, consider spectra: if we denote eigenvalues of 
+\begin_inset Formula $\hat{T}_{k}$
+\end_inset
+
+ by 
+\begin_inset Formula $\left\{ \hat{\eta}_{j}\right\} $
+\end_inset
+
+, then 
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\lambda}{\left(\eta_{j}+\lambda\right)^{2}}\leq\frac{1}{\eta_{j}+\lambda},\;\forall j & \Rightarrow & \lambda\left(\hat{T}_{k}+\lambda I\right)^{-2}\preceq\left(\hat{T}_{k}+\lambda I\right)^{-1}\\
+\frac{\eta_{j}}{\left(\eta_{j}+\lambda\right)^{2}}\leq\frac{1}{\eta_{j}+\lambda},\;\forall j & \Rightarrow & \left(\hat{T}_{k}+\lambda I\right)^{-1}\hat{T}_{k}\left(\hat{T}_{k}+\lambda I\right)^{-1}\preceq\left(\hat{T}_{k}+\lambda I\right)^{-1}.
+\end{eqnarray*}
+
+\end_inset
+
+Thus, to bound 
+\begin_inset Formula $\left\Vert \sum_{i=1}^{n}\frac{\beta_{i}}{\sqrt{q(x_{i})}}k(\cdot,x_{i})-\mu_{k,g}\right\Vert _{\mathcal{H}_{k}}^{2}+n\lambda\left\Vert \beta\right\Vert _{2}^{2}$
+\end_inset
+
+ it suffices to bound 
+\begin_inset Formula $\lambda\left\langle f_{k,g},\left(\hat{T}_{k}+\lambda I\right)^{-1}f_{k,g}\right\rangle _{\LL}=\lambda\left\langle g,T_{k}^{1/2}\left(\hat{T}_{k}+\lambda I\right)^{-1}T_{k}^{1/2}g\right\rangle _{\LL}$
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -1393,13 +1461,31 @@ Choice of
 \end_layout
 
 \begin_layout Standard
+Consider
+\begin_inset Formula 
+\begin{eqnarray*}
+d(\lambda) & = & \text{Tr}\left[T_{k}\left(T_{k}+\lambda I\right)^{-1}\right]\\
+ & = & \sum_{j}\frac{\eta_{j}}{\eta_{j}+\lambda}\\
+ & = & \sum_{j}\left\langle \left(T_{k}+\lambda I\right)^{-1}e_{j},T_{k}e_{j}\right\rangle _{\LL}\\
+ & = & \sum_{j}\left\langle \left(T_{k}+\lambda I\right)^{-1}e_{j},\int\left\langle \psi\left(\cdot,x\right),e_{j}\right\rangle _{\LL}\psi\left(\cdot,x\right)d\rho(x)\right\rangle _{\LL}\\
+ & = & \int\sum_{j}\left\langle \left(T_{k}+\lambda I\right)^{-1}e_{j},\left\langle \psi\left(\cdot,x\right),e_{j}\right\rangle _{\LL}\psi\left(\cdot,x\right)\right\rangle _{\LL}d\rho(x)\\
+ & = & \int\left\langle \left(T_{k}+\lambda I\right)^{-1}\psi\left(\cdot,x\right),\psi\left(\cdot,x\right)\right\rangle _{\LL}d\rho(x)\\
+ & \leq & d_{\max}(q,\lambda):=\sup_{x}\frac{\left\langle \left(T_{k}+\lambda I\right)^{-1}\psi\left(\cdot,x\right),\psi\left(\cdot,x\right)\right\rangle _{\LL}}{q(x)}.
+\end{eqnarray*}
+
+\end_inset
+
+To simplify, we have:
+\end_layout
+
+\begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-q(x)\propto\left\langle \psi\left(\cdot,x\right),\left(T_{k}+\lambda I\right)^{-1}\psi\left(\cdot,x\right)\right\rangle _{\LL} & =\\
-\left\langle I_{k}k\left(\cdot,x\right),T_{k}^{-1/2}\left(T_{k}+\lambda I\right)^{-1}T_{k}^{-1/2}I_{k}k\left(\cdot,x\right)\right\rangle _{\LL} & =\\
-\left\langle \sum\eta_{j}e_{j}(x)e_{j},\sum\eta_{i}e_{i}(x)T_{k}^{-1/2}\left(T_{k}+\lambda I\right)^{-1}T_{k}^{-1/2}e_{i}\right\rangle _{\LL} & =\\
-\left\langle \sum\eta_{j}e_{j}(x)e_{j},\sum\frac{1}{\eta_{i}+\lambda}e_{i}(x)e_{i}\right\rangle _{\LL} & =\\
-\sum\frac{\eta_{j}}{\eta_{j}+\lambda}e_{i}^{2}(x) & =\\
+\left\langle \psi\left(\cdot,x\right),\left(T_{k}+\lambda I\right)^{-1}\psi\left(\cdot,x\right)\right\rangle _{\LL}=\\
+\left\langle I_{k}k\left(\cdot,x\right),T_{k}^{-1/2}\left(T_{k}+\lambda I\right)^{-1}T_{k}^{-1/2}I_{k}k\left(\cdot,x\right)\right\rangle _{\LL}=\\
+\left\langle \sum_{j}\eta_{j}e_{j}(x)e_{j},\sum_{i}\eta_{i}e_{i}(x)T_{k}^{-1/2}\left(T_{k}+\lambda I\right)^{-1}T_{k}^{-1/2}e_{i}\right\rangle _{\LL}=\\
+\left\langle \sum\eta_{j}e_{j}(x)e_{j},\sum\frac{1}{\eta_{i}+\lambda}e_{i}(x)e_{i}\right\rangle _{\LL}=\\
+\sum_{j}\frac{\eta_{j}}{\eta_{j}+\lambda}e_{j}^{2}(x)=\\
 \check{k}_{\lambda}(x,x),
 \end{align*}
 
@@ -1426,6 +1512,71 @@ where
 \end_inset
 
  (marginal kernel from DPP).
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+The bound on error in Proposition 1 of 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Bach2015"
+
+\end_inset
+
+ requires to have 
+\begin_inset Formula $n=\mathcal{O}\left(d_{\max}\log\left(d_{\max}\right)\right)$
+\end_inset
+
+.
+ Therefore, we seek to minimize 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $d_{\max}(q,\lambda)=\sup_{x}\frac{\check{k}_{\lambda}(x,x)}{q(x)}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ so we set: 
+\begin_inset Formula 
+\[
+q(x)\propto\check{k}_{\lambda}(x,x),
+\]
+
+\end_inset
+
+for which 
+\begin_inset Formula $d_{\max}(q,\lambda)=\int\check{k}_{\lambda}(x,x)d\rho(x)=d(\lambda)$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
