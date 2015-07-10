@@ -290,7 +290,7 @@ status open
 \end_layout
 
 \begin_layout Fact
-\begin_inset Formula $\left\langle h,C_{\nu}g\right\rangle _{\mathcal{H}_{k}}=\left\langle h,S_{k}S_{k}^{*}g\right\rangle _{\mathcal{H}_{k}}=\left\langle I_{k}h,I_{k}g\right\rangle _{\mathcal{H}_{k}}=\int h(x)g(x)d\nu(x)$
+\begin_inset Formula $\left\langle h,C_{\nu}g\right\rangle _{\mathcal{H}_{k}}=\left\langle h,S_{k}S_{k}^{*}g\right\rangle _{\mathcal{H}_{k}}=\left\langle I_{k}h,I_{k}g\right\rangle _{L_{2}(\mathcal{X};\nu)}=\int h(x)g(x)d\nu(x)$
 \end_inset
 
 .
