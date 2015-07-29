@@ -91,6 +91,12 @@ theorems-ams-bytype
 \end_inset
 
 
+\begin_inset FormulaMacro
+\newcommand{\iid}{\overset{iid}{\sim}}
+{\overset{iid}{\sim}}
+\end_inset
+
+
 \end_layout
 
 \begin_layout Title
@@ -1364,11 +1370,11 @@ reference "eq:alpha_opt"
 
 with solution
 \begin_inset Formula 
-\begin{eqnarray*}
-\beta & = & \left(\tilde{K}_{q}+n\lambda I\right)^{-1}\left(q\left(x_{i}\right)^{-1/2}\mukg\left(x_{i}\right)\right)_{i=1}^{n}\\
- & = & \left(\Phi^{*}\Phi+n\lambda I\right)^{-1}\Phi^{*}f_{k,g}\\
- & = & \frac{1}{n}\Phi^{*}\left(\hat{T}_{k}+\lambda I\right)^{-1}f_{k,g}.
-\end{eqnarray*}
+\begin{eqnarray}
+\beta & = & \left(\tilde{K}_{q}+n\lambda I\right)^{-1}\left(q\left(x_{i}\right)^{-1/2}\mukg\left(x_{i}\right)\right)_{i=1}^{n}\label{eq:Bach_weights}\\
+ & = & \left(\Phi^{*}\Phi+n\lambda I\right)^{-1}\Phi^{*}f_{k,g}\nonumber \\
+ & = & \frac{1}{n}\Phi^{*}\left(\hat{T}_{k}+\lambda I\right)^{-1}f_{k,g}.\nonumber 
+\end{eqnarray}
 
 \end_inset
 
@@ -1376,7 +1382,14 @@ where we set
 \begin_inset Formula $f_{k,g}=\mathcal{T}_{k}^{-1/2}\mu_{k,g}$
 \end_inset
 
-.
+ and denoted 
+\begin_inset Formula $\tilde{K}_{q}=\Phi^{*}\Phi$
+\end_inset
+
+, i.e., 
+\begin_inset Formula $\left[\tilde{K}_{q}\right]_{ij}=\frac{k(x_{i},x_{j})}{\sqrt{q(x_{i})q(x_{j})}}$
+\end_inset
+
  
 \end_layout
 
@@ -1574,6 +1587,760 @@ q(x)\propto\check{k}_{\lambda}(x,x),
 
 for which 
 \begin_inset Formula $d_{\max}(q,\lambda)=\int\check{k}_{\lambda}(x,x)d\rho(x)=d(\lambda)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Notes following meeting on July 28, 2015.
+\end_layout
+
+\begin_layout Paragraph
+Some notation.
+ 
+\end_layout
+
+\begin_layout Standard
+We want to 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+compute 
+\begin_inset Formula $\int h(x)d\rho(x)$
+\end_inset
+
+, where 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $h\in\mathcal{H}_{k}$
+\end_inset
+
+ for some kernel 
+\begin_inset Formula $k$
+\end_inset
+
+ and some probability measure 
+\begin_inset Formula $\rho$
+\end_inset
+
+ on domain 
+\begin_inset Formula $\mathcal{X}$
+\end_inset
+
+.
+ We need the following:
+\end_layout
+
+\begin_layout Enumerate
+A way to compute/approximate the optimal importance density (wrt 
+\begin_inset Formula $\rho$
+\end_inset
+
+) 
+\begin_inset Formula $q(x)\propto\check{k}_{\lambda}(x,x)$
+\end_inset
+
+ where 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\check{k}_{\lambda}(x,x)=\sum_{m}\frac{\eta_{m}}{\eta_{m}+\lambda}e_{m}^{2}(x)$
+\end_inset
+
+, provided that we have Mercer expansion 
+\begin_inset Formula $k(x,y)=\sum_{m}\eta_{m}e_{m}(x)e_{m}(y)$
+\end_inset
+
+ of 
+\begin_inset Formula $k$
+\end_inset
+
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+with respect to
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\begin_inset Formula $\rho$
+\end_inset
+
+, i.e., 
+\begin_inset Formula $\left\{ e_{m}\right\} $
+\end_inset
+
+ are ONS in 
+\begin_inset Formula $L_{2}(\rho)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+A way to compute/approximate mean embedding 
+\begin_inset Formula $\mu_{\rho}=\int k(\cdot,x)d\rho(x)$
+\end_inset
+
+ (needed for computing weights).
+\end_layout
+
+\begin_layout Paragraph*
+Methods to compare.
+\end_layout
+
+\begin_layout Enumerate
+Sampling from 
+\begin_inset Formula $d\rho(x)$
+\end_inset
+
+ and weighting appropriately
+\end_layout
+
+\begin_layout Enumerate
+Sampling from 
+\begin_inset Formula $\frac{k(x,x)}{\int k(x,x)d\rho(x)}d\rho(x)$
+\end_inset
+
+ and weighting appropriately
+\end_layout
+
+\begin_layout Enumerate
+Sampling from 
+\begin_inset Formula $q(x)d\rho(x)$
+\end_inset
+
+ and weighting appropriately
+\end_layout
+
+\begin_layout Enumerate
+Sampling from DPP and weighting appropriately
+\end_layout
+
+\begin_layout Paragraph*
+Questions to answer.
+\end_layout
+
+\begin_layout Enumerate
+Is improvement from 3 to 4 larger than from 1-2 to 3?
+\end_layout
+
+\begin_layout Enumerate
+How do these improvements change with increasing dimensionality
+\end_layout
+
+\begin_layout Subsection
+Details of examples
+\end_layout
+
+\begin_layout Paragraph*
+Example 1: Sobolev spaces and Beta distributions
+\end_layout
+
+\begin_layout Standard
+We consider domain 
+\begin_inset Formula $\mathcal{X}=[0,1]$
+\end_inset
+
+.
+ Kernel is
+\begin_inset Formula 
+\begin{eqnarray*}
+k(x,y) & = & \sum_{m=0}^{\infty}m^{-2s}\cos\left(2\pi m\left(x-y\right)\right)\\
+ & = & \sum_{m=0}^{\infty}m^{-2s}\left[\cos\left(2\pi mx\right)\cos\left(2\pi my\right)+\sin\left(2\pi mx\right)\sin\left(2\pi my\right)\right].
+\end{eqnarray*}
+
+\end_inset
+
+Consider the simple case of 
+\begin_inset Formula $\rho$
+\end_inset
+
+ being Uniform on 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+: 
+\begin_inset Formula $d\rho(x)=dx$
+\end_inset
+
+.
+ Then
+\end_layout
+
+\begin_layout Enumerate
+Because
+\begin_inset Formula 
+\begin{eqnarray*}
+\int_{0}^{1}\cos\left(2\pi mx\right)\sin\left(2\pi m'x\right)dx & = & 0\\
+\int_{0}^{1}\cos\left(2\pi mx\right)\cos\left(2\pi m'x\right)dx & = & \frac{1}{2}\delta(m-m')\\
+\int_{0}^{1}\sin\left(2\pi mx\right)\sin\left(2\pi m'x\right)dx & = & \frac{1}{2}\delta(m-m'),
+\end{eqnarray*}
+
+\end_inset
+
+we have the desired Mercer expansion with eigenfunctions 
+\begin_inset Formula $\left\{ \sqrt{2}\cos\left(2\pi mx\right),\sqrt{2}\sin\left(2\pi mx\right)\right\} $
+\end_inset
+
+ and corresponding eigenvalues 
+\begin_inset Formula $\eta_{m}=\frac{1}{2}m^{-2s}$
+\end_inset
+
+ (each with multiplicity 2), so can compute 
+\begin_inset Formula $q$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\check{k}_{\lambda}(x,x)=\sum_{m}\frac{\eta_{m}}{\eta_{m}+\lambda}e_{m}^{2}(x)=\sum_{m}\frac{m^{-2s}/2}{m^{-2s}/2+\lambda}\propto1,
+\end{equation}
+
+\end_inset
+
+which is just uniform (
+\begin_inset Formula $qd\rho=d\rho$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+Because 
+\begin_inset Formula $\forall y$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+\mu_{p}(y)=\int k(y,x)d\rho(x) & = & 1+\int_{0}^{1}\left(\sum_{m=1}^{\infty}m^{-2s}\cos\left(2\pi m\left(x-y\right)\right)\right)dx\\
+ & = & 1+\sum_{m=0}^{\infty}m^{-2s}\underset{=0}{\underbrace{\int_{0}^{1}\cos\left(2\pi m\left(x-y\right)\right)dx}}\\
+ & = & 1,
+\end{eqnarray*}
+
+\end_inset
+
+mean embedding is also trivial to compute.
+\end_layout
+
+\begin_layout Remark
+Is it possible to consider DPP with 
+\begin_inset Quotes eld
+\end_inset
+
+true marginal kernel
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\check{k}_{\lambda}$
+\end_inset
+
+ which we have analytically in this case (supported on all of 
+\begin_inset Formula $[0,1]$
+\end_inset
+
+)? We have eigenvalues analytically so can sample Bernoullis and can explicitly
+ evaluate eigenfunctions.
+\end_layout
+
+\begin_layout Standard
+If now 
+\begin_inset Formula $d\rho$
+\end_inset
+
+ is no longer uniform, neither 1 nor 2 are trivial anymore.
+ Say 
+\begin_inset Formula $d\rho(x)=\frac{1}{B(a,b)}x^{a-1}(1-x)^{b-1}dx$
+\end_inset
+
+, i.e., 
+\begin_inset Formula $\text{Beta}(a,b)$
+\end_inset
+
+ distribution.
+\end_layout
+
+\begin_layout Enumerate
+Finding Mercer's expansion now involves finding eigenfunctions of
+\begin_inset Formula 
+\begin{eqnarray*}
+f & \mapsto & \frac{1}{B(a,b)}\sum_{m=0}^{\infty}m^{-2s}\int_{0}^{1}f(x)\cos\left(2\pi m\left(x-\cdot\right)\right)x^{a-1}(1-x)^{b-1}dx,
+\end{eqnarray*}
+
+\end_inset
+
+which does not look obvious.
+ Alternatively, we could use a generic procedure to approximate marginal
+ kernel 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\check{k}_{\lambda}$
+\end_inset
+
+ by using the fact that it is the kernel of the operator 
+\begin_inset Formula $T_{k}\left(T_{k}+\lambda I\right)^{-1}$
+\end_inset
+
+.
+ First we would sample 
+\begin_inset Formula $\left\{ z_{i}\right\} _{i=1}^{N}\iid d\rho$
+\end_inset
+
+, and form a kernel matrix 
+\begin_inset Formula $K$
+\end_inset
+
+ on these points.
+ 
+\begin_inset Formula $\hat{K}_{\lambda}=K\left(K+\lambda I\right)^{-1}$
+\end_inset
+
+ would then be the approximate kernel matrix of the marginal kernel and
+ so we can subsample from 
+\begin_inset Formula $\left\{ z_{i}\right\} $
+\end_inset
+
+ with probabilities proportional to 
+\begin_inset Formula $\left[\hat{K}_{\lambda}\right]_{ii}$
+\end_inset
+
+ (which results approximately in a sample from 
+\begin_inset Formula $qd\rho$
+\end_inset
+
+).
+ This is exactly sampling marginally from a DPP supported on 
+\begin_inset Formula $\left\{ z_{i}\right\} $
+\end_inset
+
+, so there is effectively no additional cost incurred by sampling from the
+ full DPP here.
+ Computing weights using Bach's approach in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Bach_weights"
+
+\end_inset
+
+ also involves computing 
+\begin_inset Formula $q(x_{i})$
+\end_inset
+
+ for the subsampled 
+\begin_inset Formula $x_{i}=z_{\ell}$
+\end_inset
+
+ for some 
+\begin_inset Formula $\ell\in\left\{ 1,\ldots,N\right\} $
+\end_inset
+
+.
+ Here, we can also substitute 
+\begin_inset Formula $\hat{q}(x_{i})=\left[\hat{K}_{\lambda}\right]_{\ell\ell}/\text{Tr}\left[\hat{K}_{\lambda}\right]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Finding mean embedding is also not obvious.
+ Again, we can simply work with empirical mean embedding on a sample 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\left\{ z_{i}\right\} \iid\rho$
+\end_inset
+
+, 
+\begin_inset Formula $\hat{\mu}_{\rho}=\frac{1}{N}\sum_{i=1}^{N}k(\cdot,z_{i})$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Paragraph*
+Example 2: Gaussian RBF kernel and Gaussian 
+\begin_inset Formula $\rho$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Gaussian RBF kernel on 
+\begin_inset Formula $\mathbb{R}^{p}$
+\end_inset
+
+: 
+\begin_inset Formula $k(x,y)=\exp\left(-\frac{\left\Vert x-y\right\Vert _{2}^{2}}{2\sigma^{2}}\right)$
+\end_inset
+
+.
+ For the case where 
+\begin_inset Formula $\rho$
+\end_inset
+
+ is Gaussian, we can find Mercer's expansion analytically.
+ If we consider univariate case and 
+\begin_inset Formula $\rho$
+\end_inset
+
+ is 
+\begin_inset Formula $\mathcal{N}(0,\tau^{2})$
+\end_inset
+
+ then we obtain expansion 
+\begin_inset CommandInset citation
+LatexCommand cite
+after "Section 4.3.1"
+key "RasmussenWilliams06"
+
+\end_inset
+
+ with
+\begin_inset Formula 
+\begin{equation}
+\eta_{m}=\sqrt{\frac{2a}{A}}B^{m},\;e_{m}(x)=\exp\left(-\left(c-a\right)x^{2}\right)H_{m}\left(\sqrt{2c}x\right),\quad m=0,1,\ldots
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $a=1/4\tau^{2}$
+\end_inset
+
+, 
+\begin_inset Formula $b=1/2\sigma^{2}$
+\end_inset
+
+, 
+\begin_inset Formula $c=\sqrt{a^{2}+2ab}$
+\end_inset
+
+, 
+\begin_inset Formula $A=a+b+c$
+\end_inset
+
+, 
+\begin_inset Formula $B=b/A$
+\end_inset
+
+ and 
+\begin_inset Formula $H_{m}=\left(-1\right)^{m}\exp\left(x^{2}\right)\frac{d^{m}}{dx^{m}}\exp\left(-x^{2}\right)$
+\end_inset
+
+ is the 
+\begin_inset Formula $m$
+\end_inset
+
+-th order Hermite polynomial.
+ If working with isotropic kernels and distributions, readily generalizes
+ to the multivariate case, since one would simply work with the products
+ of eigenvalues and eigenfunctions across dimensions.
+ Due to the geometric decrease of eigenvalues, truncating sum 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\check{k}_{\lambda}(x,x)=\sum_{m=0}^{\infty}\frac{\eta_{m}}{\eta_{m}+\lambda}e_{m}^{2}(x)$
+\end_inset
+
+ should give a good estimate of the optimal importance density 
+\begin_inset Formula $q(x)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Remark
+What does importance distribution
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\begin_inset Formula $qd\rho$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ look like in this case? Is it very far from the original Gaussian? If it
+ looks very different, and there are substantial improvements for using
+ 
+\begin_inset Formula $q$
+\end_inset
+
+ rather than 
+\begin_inset Formula $\rho$
+\end_inset
+
+, an unbiased estimator of 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\check{k}_{\lambda}(x,x)$
+\end_inset
+
+ can be constructed for each 
+\begin_inset Formula $x$
+\end_inset
+
+, so one could sample from 
+\begin_inset Formula $q$
+\end_inset
+
+ with pseudo-marginal MCMC.
+\end_layout
+
+\begin_layout Standard
+Mean embedding amounts to solving a Gaussian integral so can also be computed
+ analytically.
+ For simplicity, if 
+\begin_inset Formula $\rho$
+\end_inset
+
+ is 
+\begin_inset Formula $\mathcal{N}(0,\tau^{2}I)$
+\end_inset
+
+, then
+\begin_inset Formula 
+\[
+\mu_{\rho}(x)=\left(\frac{\sigma^{2}}{\sigma^{2}+\tau^{2}}\right)^{p/2}\exp\left(-\frac{\left\Vert x\right\Vert _{2}^{2}}{2\left(\sigma^{2}+\tau^{2}\right)}\right).
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Paragraph*
+Example 3: Brownian covariance kernel (and Gaussian or uniform 
+\begin_inset Formula $\rho$
+\end_inset
+
+?)
+\end_layout
+
+\begin_layout Standard
+Here 
+\begin_inset Formula $k(x,y)=\frac{1}{2}\left(\left\Vert x\right\Vert _{2}^{2H}+\left\Vert y\right\Vert _{2}^{2H}-\left\Vert x-y\right\Vert _{2}^{2H}\right)$
+\end_inset
+
+, for 
+\begin_inset Formula $H\in(0,1]$
+\end_inset
+
+ (recovers linear kernel for 
+\begin_inset Formula $H=1$
+\end_inset
+
+ and covariance of standard Brownian motion for 
+\begin_inset Formula $H=1/2$
+\end_inset
+
+).
+ Not translation invariant.
+ See 
+\begin_inset CommandInset citation
+LatexCommand cite
+after "p.319"
+key "BerTho04"
+
+\end_inset
+
+ for its RKHS.
+ Also, not a bounded kernel, so mean embeddings are only defined for measures
+ with finite fractional moments 
+\begin_inset Formula $\int\left\Vert x\right\Vert _{2}^{H}d\rho(x)$
+\end_inset
+
+.
+ Can consider a compact domain to get around this, e.g., 
+\begin_inset Formula $\mathcal{X}=\left\{ x\in\mathbb{R}^{p}:\left\Vert x\right\Vert \leq1\right\} $
+\end_inset
+
+.
+ Mercer's expansions should be known in some cases, e.g., 
+\begin_inset Formula $H=1/2$
+\end_inset
+
+, 
+\begin_inset Formula $p=1$
+\end_inset
+
+, 
+\begin_inset Formula $\mathcal{X}=[0,1]$
+\end_inset
+
+ and 
+\begin_inset Formula $\rho$
+\end_inset
+
+ uniform (note 
+\begin_inset Formula $k(x,y)=\min(x,y)$
+\end_inset
+
+ in this case) should have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\eta_{m}=\frac{1}{\left(m+\frac{1}{2}\right)^{2}\pi^{2}},\;e_{m}(x)=\sqrt{2}\sin\left(\left(m+\frac{1}{2}\right)\pi x\right),\quad m=0,1,\ldots
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Example 4: Vovk's infinite polynomial kernel (and Gaussian 
+\begin_inset Formula $\rho$
+\end_inset
+
+?)
+\end_layout
+
+\begin_layout Standard
+Here 
+\begin_inset Formula $\mathcal{X}=\left\{ x\in\mathbb{R}^{p}:\left\Vert x\right\Vert \leq c<1\right\} $
+\end_inset
+
+ and 
+\begin_inset Formula $k(x,y)=\left(1-x^{\top}y\right)^{-\alpha}$
+\end_inset
+
+, so also not translation invariant.
+ Due to flat spectrum, expected to have poor generalization properties
+\begin_inset CommandInset citation
+LatexCommand cite
+after "p.113"
+key "ScholkopfSmola02"
+
+\end_inset
+
+, so not often used in practice.
+ However, it is known to be universal 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Steinwart2001"
+
 \end_inset
 
 .
