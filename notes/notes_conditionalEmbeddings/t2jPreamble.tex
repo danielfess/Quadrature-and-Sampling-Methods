@@ -1,0 +1,49 @@
+% Document definition
+\documentclass[a4paper,12pt,reqno]{article}
+
+\usepackage[top=3cm,bottom=2.cm,marginparwidth=2.4cm,marginparsep=.7cm,inner=4cm,textwidth=.67\paperwidth]{geometry}
+
+% Elementary packages
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{caption}
+
+% Things so that the TEX and the HTML look similar
+\usepackage[T1]{fontenc}
+\usepackage{palatino}	% for general text
+\usepackage{beramono} 	% for listings
+
+% Colors
+\usepackage[usenames,dvipsnames,svgnames]{xcolor}
+
+% Hyper-references
+\usepackage[	colorlinks	= true,
+			all colors	= NavyBlue!70!Blue	]{hyperref}
+
+% Highlighted box
+\usepackage{mdframed}
+\mdfsetup{backgroundcolor=yellow!10}
+\newenvironment{ybox}{\begin{mdframed}}{\end{mdframed}}
+
+% Listings
+\usepackage{listings}
+\lstdefinelanguage{Julia}{morekeywords={abstract,begin,break,case,catch,const,continue,do,else,elseif,end,export,false,for,function,immutable,import,importall,if,in,macro,module,otherwise,quote,return,switch,true,try,type,typealias,using,while},%
+   sensitive=true,%
+   alsoother={$},%
+   morecomment=[l]\#,%
+   morecomment=[n]{\#=}{=\#},%
+   morestring=[s]{"}{"},%
+   morestring=[m]{'}{'},%
+}[keywords,comments,strings]%
+
+\lstset{%
+    language         = Julia,
+    backgroundcolor=\color{Gray!10},
+    basicstyle       = \scriptsize\ttfamily,
+    keywordstyle     = \bfseries\color{blue},
+    stringstyle      = \color{magenta},
+    commentstyle     = \color{ForestGreen},
+    showstringspaces = false,
+}

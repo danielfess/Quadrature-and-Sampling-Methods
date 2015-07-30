@@ -1,0 +1,219 @@
+% source tex if interested, proper output is the .HTML file (open with CSS file in same dir)
+
+\input{t2jPreamble}
+
+\title{RKHS Embeddings}
+\author{}
+\newcommand{\ctext}[1]{\textcolor{DarkMagenta}{#1}}
+\begin{document}
+\maketitle
+
+\newcommand{\E}{\mathbb E}
+\newcommand{\eqa}[1]{\begin{eqnarray}#1\end{eqnarray}}
+\newcommand{\scal}[1]{\left\langle#1\right\rangle}
+\newcommand{\Id}{\mathbf I}
+
+These notes were prepared for a talk to the Kernel Methods reading group in July 2015, they're based on \ctext{Le Song et al. (2013)} and on \href{http://www.stats.ox.ac.uk/~lienart/gml15_rkhsembeddings.html}{\textbf{Dino's talk}} for the \href{http://www.stats.ox.ac.uk/~lienart/gml.html}{\textbf{Graphical Model Lectures '15}}.
+
+\section*{Introduction}
+Recall the basics:
+
+%jem: :{*Reproducing Kernel Hilbert Space* (RKHS)}
+A Hilbert space $\mathcal H$ of functions $f:\mathcal X\to \mathbb R$ defined on a non-empty set $\mathcal X$ is said to be a RKHS if \emph{evaluation functionals} $\delta_x:f\mapsto f(x)$ are \emph{continuous} for all $x\in \mathcal X$.
+
+%jem: :{*Reproducing kernel*}
+By Riesz theorem, since $\delta_x$ is a continuous functional, it has a representer in $\mathcal H$ that we can denote $k_x$ such that
+\begin{eqnarray}
+	\langle f, k_x \rangle_{\mathcal H} &=& \delta_x(f)  \,\,=\,\,f(x).
+\end{eqnarray}
+%jem: :{}
+We can then define a (positive-definite) bilinear form $k:\mathcal X\times\mathcal X\to\mathbb R$ as $k(x,x'):=\langle k_x,k_{x'}\rangle_{\mathcal H}$. This is known as the \emph{reproducing kernel} of $\mathcal H$; we will also write $k_x=k(\cdot,x)$.
+
+\begin{ybox}
+	(\textbf{Moore-Aronszajn theorem}) Every positive-definite bilinear form $k$ is a reproducing kernel for some Hilbert space $\mathcal H_k$.
+\end{ybox}
+When the kernel is clear from the context, we will simply write $\mathcal H$ for the RKHS.
+
+\section{Kernel Embedding of a Distribution}
+\subsection{Mean embedding}
+A classical way to try to represent points in a given space $\mathcal X$ is to embed them in $\mathbb R^s$ using a $s$-dimensional \emph{feature map} $\Phi:\mathcal X\to \mathbb R^s$ with
+\begin{eqnarray}
+	x \mapsto (\varphi_1(x),\dots,\varphi_s(x)).\nonumber
+\end{eqnarray}
+Instead, we can now consider embedding points in a RKHS with the infinite dimensional feature map $x\mapsto k_x$. Note that we then have easily computable \textbf{inner products} between points with
+\begin{eqnarray}
+	\langle k_x,k_y\rangle_{\mathcal H} &=& \langle k(\cdot,x),k(\cdot,y)\rangle_{\mathcal H} \,\,=\,\, k(x,y).
+\end{eqnarray}
+Recall that an inner-product is a \emph{measure of alignment} so that this automatically gives us a measure of similarity between points through this kernel.
+
+%jem: :{*Characteristic kernel*}
+When the embedding is \emph{injective} (i.e., different objects are mapped to different points in the RKHS), the corresponding kernel is said to be \emph{characteristic}. (Often the case for standard kernels).
+
+\begin{ybox}
+In particular, one can look at the set of distributions and take each distribution $P$ as a point that we can embed through the \textbf{mean embedding}:
+\begin{eqnarray}
+	P \,\mapsto\, \mu_X(P,k) &:=& \mathbb E_{X\sim P}\left[ k(\cdot,X) \right] \,\,=\,\,\E_{X}[k_{X}],
+\end{eqnarray}
+and, naturally, $\mu_X(P,k)\in\mathcal H$.
+\end{ybox}
+When the kernel and the law are clear from the context, we will simply write $\mu_{X}$. As before, observe that we inherit a notion of similarity between probability measures by looking at the inner product on the RKHS which takes the simple form
+\begin{eqnarray}
+	\langle \mu_X(P,k),\mu_Y(Q,k)\rangle_{\mathcal H} &=& \mathbb E_{X,Y}\left[k(X,Y)\right],
+\end{eqnarray}
+and this can easily be estimated if we have samples from $P$ and $Q$. Note also that $\mu_X$ represents \textbf{expectations wrt $P$} i.e., for any $f\in\mathcal H$,
+\begin{eqnarray}
+	\mathbb E_{X}[f(X)] &=& \mathbb E_X\left[\langle f, k_{X}\rangle_{\mathcal H}\right] \,\,=\,\, \langle f,\mu_X\rangle_{\mathcal H}.
+\end{eqnarray}
+
+\subsection{Joint Embedding}
+The generalization to joint distributions is straightforward using tensor product feature spaces.
+\begin{ybox}
+In the case where we have two variables $X$ and $Y$ jointly distributed according to a distribution $P$, we can define
+\eqa{
+	P\, \mapsto \,\mathcal C_{XY}(P) &:=& \E_{XY}[k_{X}\otimes k_{Y}],
+}
+assuming that the two variables share the same kernel.
+\end{ybox}
+The tensor product satisfies $\langle k_{x}\otimes  k_{y}, k_{x'} \otimes k_{y'} \rangle_{\mathcal H\otimes \mathcal H} = k(x,x')k(y,y')$.\\
+
+In the same way that $\mu_{X}$ represents the expectation operator, the joint-embedding $\mathcal C_{XY}$ can be viewed as the \textbf{uncentered cross-covariance operator}: for any two functions $f,g\in \mathcal H$ (still assuming both random variables share the same kernel), their covariance is given by
+\eqa{		\E_{XY}[f(X)f(Y)] &=& \langle f\otimes g, \mathcal C_{XY}\rangle_{\mathcal H\otimes \mathcal H} \,\,=\,\, \langle f,\mathcal C_{XY}g\rangle_{\mathcal H}.	}
+Following the same reasoning, we can define the auto-covariance operators $\mathcal C_{XX}$ and $\mathcal C_{YY}$. Note that in the same way that $\mu_X$ represents expectations with respect to $P$, these operators represent cross-covariance/auto-covariance with respect to $P$.\\
+\textbf{Note}: we have assumed that both variables share the same kernels but this needs not be the case, we can consider a second kernel $k'$ for kernel and the corresponding RKHS $\mathcal H'$ the cross-covariance operator then belongs to the product space $\mathcal H\otimes\mathcal H'$ (which is also a RKHS).
+
+\subsection{MMD and HSIC}
+When considering a characteristic kernel (e.g., Gaussian RBF with $k(x,x')=\exp(-\sigma \|x-x'\|^{2})$), the RKHS embedding is injective. We can then use the distance in the RKHS as a proxy for similarity in the distribution space. This can be used in the two-sample test or when testing for independence. In the two-sample test, the test statistic is the squared distance between the embeddings of the two distributions:
+\begin{ybox}
+The kernel \textbf{Maximum Mean Discrepancy} (\textbf{MMD}) measure is defined for two distributions $P$ and $Q$ by
+\begin{eqnarray}
+	\text{MMD}(P,Q) &:=& \|\mu_X-\mu_Y\|_{\mathcal H}^2,
+\end{eqnarray}
+where $X\sim P$ and $Y\sim Q$.
+\end{ybox}
+When testing independence, the test statistic is the squared distance between the embeddings of the joint distribution and the product of its marginals:
+\begin{ybox}
+The \textbf{Hilbert-Schmidt Independence Criterion} (\textbf{HSIC}) is defined for two distributions $P$ and $Q$ by
+\eqa{		\text{HSIC}(P,Q) &:=& \|\mathcal C_{XY} - \mu_{X}\otimes \mu_{Y}\|^{2}_{\mathcal H},	}
+where $X\sim P$ and $Y\sim Q$.
+\end{ybox}
+
+\subsection{Finite Sample Embeddings}
+All of the embeddings defined above can readily be estimated samples drawn from the laws of interest. Let $\{x_{1},\dots x_{n}\}$ be an iid draw, we can define the \textbf{empirical kernel embedding} as
+\eqa{
+	\widehat \mu_{X} \,\,=\,\, {1\over n} \sum_{i=1}^{n} k_{x_{i}},	}
+As for standard MC estimators, the rate of convergence is $\mathcal O(1/\sqrt{n})$ (and hence does not depend upon the dimensionality of the underlying space). Similarly for an iid draw of pairs $\{(x_{1},y_{1}),\dots,(x_{n},y_{n})\}$, we can define the \textbf{empirical covariance operator} as
+\eqa{\widehat{ \mathcal C}_{XY} \,\,=\,\, {1\over n} \sum_{i=1}^{n} k_{x_{i}}\otimes k_{y_{i}}.
+&=& {1\over n}\Upsilon \Phi^t \label{est cxy}}
+where $\Upsilon:=(k_{x_1},\dots,k_{x_n})$ and $\Phi:=(k_{y_1},\dots,k_{y_n})$ are the \emph{feature matrices}. \\
+To finish, it is straightforward to obtain empirical estimators for the MMD and HSIC criterion considering kernel elements $k(x_i,x_j)$, $k(y_i,y_j)$ and $k(x_i,y_j)$. In the case of the MMD for example, one has:
+\eqa{		\widehat{\text{MMD}}(P,Q) &=& {1\over n^{2}}\sum_{ij}\left(k(x_{i},x_{j})+k(y_{i},y_{j})-2k(x_{i},y_{j})\right).	}
+\section{Kernel Embeddings of Conditional Distributions}
+\subsection{Pointwise definition}
+In line with the definitions met earlier, the kernel embedding of a conditional distribution $P(Y|X)$ is defined naturally as
+\eqa{		\mu_{Y|x} &:=& \E_{Y|x}[k_{Y}],	}
+and the conditional expectation of a function $g\in \mathcal H$ can be expressed as:
+\eqa{		\E_{Y|x}[g(Y)] &=& \scal{g,\mu_{Y|x}}_{\mathcal H}.	}
+Note that we now have a family of points in the RKHS indexed by $x$ the value upon which we condition.
+\subsection{Conditional operator}
+We can also define an operator $\mathcal C_{Y|X}$ such that
+\eqa{		\mu_{Y|x} &=& \mathcal C_{Y|X} k_{x}.	}
+To do so we must first introduce a result (proved cleanly in \ctext{Fukumizu et al., (2004)}).
+\begin{ybox}
+The following identity holds (under mild tech. assumptions):
+\eqa{\mathcal C_{XX} \E_{Y|X}[g(Y)]=\mathcal C_{XY}g.}
+\end{ybox}
+To prove this, note that for $f\in \mathcal H$:
+\eqa{		\scal{f, \mathcal C_{XX}\E_{Y|X}[g(Y)]}_{\mathcal H} &=& \E_{X}[f(X)\E_{Y|X}[g(Y)]] \nonumber\\
+&=&  \E_{XY}[f(X)g(Y)] \,\,=\,\, \scal{f,\mathcal C_{XY}g}_{\mathcal H}	}
+Now, observe that
+\eqa{	 	\scal{g,\mu_{Y|x}}_{\mathcal H} \,\,=\,\,	\E_{Y|x}[g(Y)] &=& \scal{\E_{Y|X}[g(Y)],k_{x}}_{\mathcal H} \nonumber\\
+&=& \scal{\mathcal C_{XX}^{-1} \mathcal C_{XY}g , k_{x}}_{\mathcal H}\,\,=\,\, \scal{g, \mathcal C_{YX}\mathcal C_{XX}^{-1}k_{x}}_{\mathcal H},	}
+where at the last step we took the adjoint operator.
+\begin{ybox}
+We can thus define the \textbf{conditional embedding operator} as
+\eqa{		\mathcal C_{Y|X} &:=& \mathcal C_{YX} \mathcal C_{XX}^{-1}.	}
+\end{ybox}
+In practice, $\mathcal C_{XX}$ is a compact operator which means that its eigenvalues go to zero and hence its inverse is not a bounded operator. So the definition of $\mathcal C_{Y|X}$ given above is a slight abuse of notation. The inversion of $\mathcal C_{XX}$ can be replaced by the regularized inverse $(\mathcal C_{XX}+\lambda \mathbf I)^{-1}$ where $\lambda$ can be determined by cross-validation
+\subsection{Finite Sample Kernel Estimator}
+
+If we consider a dataset $\{(x_{i},y_{i})\}_{i=1:m}$ drawn iid from a joint $P$, we know that the empirical estimators for $\mathcal C_{YX}$ and $\mathcal C_{XX}$ can be written as
+\eqa{      \widehat{\mathcal C}_{YX} \,\,=\,\, {1\over n}\Phi\Upsilon^t \quad\,\text{and}\quad\, \widehat{\mathcal C}_{XX} \,\,=\,\, {1\over n}\Upsilon\Upsilon^t, }
+where $\Phi$ and $\Upsilon$ are defined as before (see equation \eqref{est cxy}). Using a trick from linear algebra for the regularized inverse (similar to Woodbury's formula, see \href{blog_linalg_invlemmas.html\#lemma2simple}{\textbf{here}} for a proof), we have
+\eqa{      \widehat{C}_{Y|X} &=& {1\over n}\Phi[\Upsilon^t (\lambda\Id + {\Upsilon\Upsilon^t\over n})]\,\,=\,\, {1\over n}\Phi [n(\lambda\Id + \Upsilon^t\Upsilon)\Upsilon^t] }
+\begin{ybox}
+The conditional embedding operator is estimated as
+    \eqa{	\widehat{\mathcal C}_{Y|X} &=& \Phi [K+\lambda \mathbf I]^{-1} \Upsilon^{t}	}
+with $K=\Upsilon^{t}\Upsilon$ (\emph{Gram matrix}).
+\end{ybox}
+The regularization parameter $\lambda$ helps to control for overfitting. The resulting Kernel embedding is
+\eqa{		\widehat \mu_{Y|x} &=& \Phi\boldsymbol \beta(x), \quad\text{where}\\
+\boldsymbol\beta(x) &=& [\beta_{i}(x)]_{i=1:m} \,\,=\,\, (K+\lambda \mathbf I)^{-1}K_{:x}, \quad \text{with}\\
+K_{:x} &=& [k(x,x_{i})]_{i=1:m}.	}
+It is thus a weighted sum of samples of $Y$ in the feature space with weights depending on the conditioning variable.
+\section{Probabilistic Reasoning with Kernel Embeddings}
+Following notations in \ctext{Song et al. (2013)}, we consider two random variables $X$ and $Y$ and denote a prior distribution on $Y$ by $\pi(Y)$ (the rest of the notations are as before).
+\subsection{Kernel sum rule}
+The marginal distribution of $X$ can be computed by integrating out $Y$ from the joint density, i.e.,
+\eqa{		Q(X) &=& \E_{Y\sim \pi}[P(X|Y)].	}
+Embedding it, we have
+\eqa{		\mu_{X}^{\pi} &:=& \E_{X\sim Q}[k_{X}] \,\,=\,\, \E_{Y\sim\pi}[\E_{X|Y}[k_{X}]].	}
+\begin{ybox}
+Using the conditional embedding, we obtain the \textbf{kernel sum rule}:
+\eqa{		\mu_{X}^{\pi} &=& \E_{Y\sim \pi}[\mathcal C_{X|Y}k_{Y}] \,\,=\,\, \mathcal C_{X|Y}\E_{Y\sim\pi}[k_{Y}]	 \,\,=\,\, \mathcal C_{X|Y}\mu^{\pi}_{Y}.}
+\end{ybox}
+This shows that the conditional embedding operator maps the embedding for $\pi(Y)$ to the embedding for $Q(X)$.
+
+In general, we assume an estimator $\widehat\mu_{Y}^{\pi}$ is given in the form $\sum_{i=1:n}\alpha_{i}k_{\tilde y_{i}}=\tilde\Phi\boldsymbol \alpha$ with some sample $\{\tilde y_{i}\}_{i=1:n}$. Assume also that we estimated the conditional embedding operator $\widehat{\mathcal C}_{X|Y}=\Upsilon(G+\lambda\mathbf I)^{-1}\Phi$ from a sample $\{(x_{i},y_{i})\}_{i=1:m}$ drawn iid from the joint.
+\begin{ybox}
+Then the sum rule has the following form:
+\eqa{	 \widehat \mu^{\pi}_{X} &=& \widehat{\mathcal C}_{X|Y}\widehat \mu_{Y}^{\pi} \,\,=\,\, \Upsilon(G+\lambda\mathbf I)^{-1}\tilde G\boldsymbol\alpha.	}
+\end{ybox}
+Again, $\Upsilon=(k_{x_{i}})_{i=1:m}$, $\Phi=(k_{y_{i}})_{i=1:m}$, $\tilde\Phi=(k_{\tilde y_{i}})_{i=1:n}$, $G$ has components $k(y_{i},y_{j})$ and $\tilde G$ has components $k(y_{i},\tilde y_{j})$.
+
+\subsection{Kernel Chain Rule}
+A joint distribution $Q$ can be factorized into a product between conditional and marginal with $Q(X,Y)=P(X|Y)\pi(Y)$.
+\begin{ybox}
+Let $Q$ as above, the \textbf{Kernel Chain Rule} reads
+    \eqa{	\mathcal C^{\pi}_{XY} &=& \mathcal C_{X|Y}\mathcal C^{\pi}_{YY}.}
+\end{ybox}
+To show this, observe that
+\eqa{		\mathcal C^{\pi}_{XY} &=& \E_{XY\sim Q}[k_{X}\otimes k_{Y}]\,\,=\,\, \E_{Y\sim \pi}[\E_{X|Y}[k_{X}]\otimes k_{Y}]\nonumber\\
+&=& \mathcal C_{X|Y}\E_{Y\sim \pi}[k_{Y}\otimes k_{Y}]\,\,=\,\, \mathcal C_{X|Y} \mathcal C^{\pi}_{YY}.	}
+\begin{ybox}
+With the same notations as before, the kernel chain rule in the finite sample case reads
+\eqa{		\widehat{\mathcal C}^{\pi}_{XY} &=& \widehat{\mathcal C}_{X|Y}\widehat{\mathcal C}_{YY}^{\pi} \,\,=\,\, \Upsilon(G+\lambda\mathbf I)^{-1}\tilde G\mathrm{diag}(\boldsymbol \alpha)\tilde\Phi^{t},	}
+\end{ybox}
+where we used that $\widehat{\mathcal C}_{YY}^{\pi}=\tilde\Phi\mathrm{diag}(\boldsymbol \alpha)\tilde \Phi^{t}$ and $\widehat{\mathcal C}_{X|Y} = \Upsilon(G+\lambda\mathbf I)^{-1}\Phi$.
+
+\subsection{Kernel Bayes Rule}
+A posterior distribution can be expressed in terms of a prior and a likelihood as
+\eqa{Q(Y|x) &=& {P(x|Y)\pi(Y)\over Q(x)},}
+where $Q(x)$ is the corresponding normalization factor. We seek to construct the conditional embedding operator $\mathcal C_{Y|X}^{\pi}$.
+\begin{ybox}
+The \textbf{Kernel Bayes Rules} reads
+\eqa{		\mu^{\pi}_{Y|x} &=& \mathcal C_{Y|X}^{\pi}k_{x} \,\,=\,\, \mathcal C^{\pi}_{YX}(\mathcal C^{\pi}_{XX})^{-1}k_{x},	}
+with then $\mathcal C^{\pi}_{Y|X}=\mathcal C^{\pi}_{YX}(\mathcal C^{\pi}_{XX})^{-1}$.
+\end{ybox}
+where $\mathcal C^{\pi}_{XX}=\mathcal C_{(XX)|Y}\mu^{\pi}_{Y}$ (using the sum rule) and $\mathcal C^{\pi}_{YX}=(\mathcal C_{X|Y}\mathcal C^{\pi}_{YY})^{t}$ (using the chain rule).
+
+The finite sample case can also be obtained (and it's a bit messy).
+
+\subsection{Kernel Bayesian Average and Posterior Decoding}
+Say we're interested in evaluating the expected value of a function $g\in \mathcal H$ with respect to the posterior $Q(Y|x)$ or to decode $y^{\star}$ most typical of the posterior. Assume that the embedding $\widehat\mu^{\pi}_{Y|x}$ is given as $\sum_{i=1:n} \beta_{i}(x)k_{\tilde y_{i}}$ and $g=\sum_{i=1:m}\alpha_{i}k_{y_{i}}$ then
+\begin{ybox}
+the \textbf{Kernel Bayes Average} reads
+    \eqa{	\scal{g,\widehat\mu_{Y|x}^{\pi}}_{\mathcal H} &=& \boldsymbol\beta^{t} \tilde G \boldsymbol \alpha \,\,=\,\, \sum_{ij} \alpha_{i}\beta_{j}(x)k(y_{i},\tilde y_{j}),	}
+ and the \textbf{Kernel Bayes Posterior Decoding} reads
+ 	\eqa{		y^{\star} &=& \arg\min_{y} \,\, -2\boldsymbol\beta^{t}\tilde G_{:y}+k(y,y).	}
+  The second expression coming from the minimization $\min_{y}\|\widehat \mu^{\pi}_{Y|x}-k_{y}\|_{\mathcal H}^{2}$ and the objective reads $\sum_{ij}\beta_{i}(x)\beta_{j}(x)k(\tilde y_{i},\tilde y_{j})-2\sum_{i}\beta_{i}(x)k(\tilde y_{i},y)+k(y,y)$.
+\end{ybox}
+In general the optimization problem is difficult to solve and it corresponds to the so-called ``pre-image'' problem in kernel methods.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{References}
+\begin{itemize}
+	\item \textbf{Fukumizu}, \textbf{Bach}, \textbf{Jordan}, \emph{Dimensionality Recution for Supervised Learning with Reproducing Kernel Hilbert Spaces}, JMLR, 2004. \href{http://www.jmlr.org/papers/volume5/fukumizu04a/fukumizu04a.ps}{\textbf{Link}}
+	\item \textbf{Song}, \textbf{Gretton}, \textbf{Fukumizu}, \emph{Kernel Embeddings of Conditional Distributions}, IEEE Signal Proc. Mag., 2013.
+	 \href{http://www.gatsby.ucl.ac.uk/~gretton/papers/SonFukGre13.pdf}{\textbf{Link}}.
+\end{itemize}
+\end{document}
