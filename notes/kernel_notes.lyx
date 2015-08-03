@@ -2349,6 +2349,228 @@ key "Steinwart2001"
 .
 \end_layout
 
+\begin_layout Subsection
+Choosing 
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Bach2015"
+
+\end_inset
+
+, optimal importance distribution will in general depend on the regularization
+ parameter 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, since 
+\begin_inset Formula $q(x)\propto\check{k}_{\lambda}(x,x)$
+\end_inset
+
+.
+ Also, 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ appears in the error bounds, so intuitively, we should make it small.
+ On the other hand, standard DPP effectively uses 
+\begin_inset Formula $\lambda=1$
+\end_inset
+
+, so what's going on? It turns out that the conditional sampling from a
+ DPP, i.e., 
+\begin_inset Formula $n$
+\end_inset
+
+-DPP where we sample only sets of size 
+\begin_inset Formula $n$
+\end_inset
+
+, will not depend on 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+ In particular, if instead of 
+\begin_inset Formula $K(K+I)^{-1}$
+\end_inset
+
+, we consider DPP with the marginal kernel 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\check{K}_{\lambda}=K(K+\lambda I)^{-1}$
+\end_inset
+
+.
+ It is easy to see that
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ 
+\begin_inset Formula $0\prec\check{K}_{\lambda}\prec I$
+\end_inset
+
+ as required and that this is just like we started with the scaled original
+ kernel 
+\begin_inset Formula $\lambda^{-1}K$
+\end_inset
+
+ since 
+\begin_inset Formula $K(K+\lambda I)^{-1}=\lambda^{-1}K\left(\lambda^{-1}K+I\right)^{-1}$
+\end_inset
+
+.
+ So in particular if we denote the corresponding DPP random set by 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\mathsf{S}_{\lambda}$
+\end_inset
+
+ (with 
+\begin_inset Formula $\mathsf{S}_{1}=\mathsf{S}$
+\end_inset
+
+) 
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathbb{P}\left[\mathsf{S}_{\lambda}=\left\{ x_{1},\ldots,x_{\mathsf{n}}\right\} \right] & \propto & \text{det}\left[\left(\lambda^{-1}K\left(x_{i},x_{j}\right)\right)_{1\leq i,j\leq\mathsf{n}}\right]\\
+ & = & \lambda^{-\mathsf{n}}\text{det}\left[\left(K\left(x_{i},x_{j}\right)\right)_{1\leq i,j\leq\mathsf{n}}\right]\\
+ & \propto & \lambda^{-\mathsf{n}}\mathbb{P}\left[\mathsf{S}=\left\{ x_{1},\ldots,x_{\mathsf{n}}\right\} \right].
+\end{eqnarray*}
+
+\end_inset
+
+Thus, small 
+\begin_inset Formula $\lambda$
+\end_inset
+
+'s are making large sets much less likely.
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ Once we condition on 
+\begin_inset Formula $\mathsf{n}=n$
+\end_inset
+
+ though, i.e., sample from an 
+\begin_inset Formula $n$
+\end_inset
+
+-DPP, distribution remains unaffected by the choice of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+.
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ In particular, samples from a 
+\begin_inset Formula $1$
+\end_inset
+
+-DPP have a distribution proportional to 
+\begin_inset Formula $K(x,x)$
+\end_inset
+
+ (this is what (2) in 
+\begin_inset Quotes eld
+\end_inset
+
+methods to compare
+\begin_inset Quotes erd
+\end_inset
+
+ does).
+ In contrast, the marginal distribution of a point being included in DPP
+ is still affected by 
+\begin_inset Formula $\lambda$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathbb{P}\left[x\in\mathsf{S}_{\lambda}\right] & = & \check{K}_{\lambda}\left(x,x\right),
+\end{eqnarray*}
+
+\end_inset
+
+which models the optimal importance density 
+\begin_inset Formula $q$
+\end_inset
+
+ wrt 
+\begin_inset Formula $d\rho$
+\end_inset
+
+.
+ 
+\end_layout
+
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
