@@ -24,7 +24,7 @@ class Kernel(object):
         pass
     
     def __str__(self):
-        s=self.__class__.__name__+ "=[]"
+        s=""
         return s
     
     @abstractmethod
@@ -78,7 +78,7 @@ class Kernel(object):
     @abstractmethod
     def ridge_regress(self,X,y,lmbda=0.01,Xtst=None):
         K=self.kernel(X)
-        n=shape(X)[0]
+        n=shape(K)[0]
         aa=linalg.solve(K+lmbda*eye(n),y)
         if Xtst is None:
             return aa
@@ -105,8 +105,8 @@ class Kernel(object):
         """
         Compute the MMD between two samples
         """
-        K11 = self.kernel(sample1,sample1)
-        K22 = self.kernel(sample2,sample2)
+        K11 = self.kernel(sample1)
+        K22 = self.kernel(sample2)
         K12 = self.kernel(sample1,sample2)
         if unbiased:
             fill_diagonal(K11,0.0)

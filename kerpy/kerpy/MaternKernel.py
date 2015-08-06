@@ -50,11 +50,10 @@ class MaternKernel(Kernel):
         self.sigma = sigma
     
     def __str__(self):
-        s=self.__class__.__name__+ "=["
+        s=self.__class__.__name__+ "["
         s += "rho="+ str(self.rho)
-        s += "nu="+ str(self.nu)
-        s += "sigma="+ str(self.sigma)
-        s += ", " + Kernel.__str__(self)
+        s += ", nu="+ str(self.nu)
+        s += ", sigma="+ str(self.sigma)
         s += "]"
         return s
     

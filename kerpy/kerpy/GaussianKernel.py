@@ -20,9 +20,8 @@ class GaussianKernel(Kernel):
         self.width = sigma
     
     def __str__(self):
-        s=self.__class__.__name__+ "=["
+        s=self.__class__.__name__+ "["
         s += "width="+ str(self.width)
-        s += ", " + Kernel.__str__(self)
         s += "]"
         return s
     
