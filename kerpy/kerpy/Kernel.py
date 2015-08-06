@@ -15,6 +15,7 @@ from numpy.random import permutation
 from numpy.lib.index_tricks import fill_diagonal
 from matplotlib.pyplot import imshow,show
 import numpy as np
+import warnings
 
 class Kernel(object):
     def __init__(self):
@@ -36,6 +37,8 @@ class Kernel(object):
     
     @abstractmethod
     def rff_expand(self,X):
+        if self.rff_freq is None:
+            raise ValueError("rff_freq has not been set. use rff_generate first")
         xdotw=dot(X,(self.rff_freq).T)
         return sqrt(2./self.rff_num)*np.concatenate( ( cos(xdotw),sin(xdotw) ) , axis=1 )
         
@@ -85,6 +88,9 @@ class Kernel(object):
     
     @abstractmethod
     def ridge_regress_rff(self,X,y,lmbda=0.01,Xtst=None):
+        if self.rff_freq is None:
+            warnings.warn("\nrff_freq has not been set!\nGenerating new random frequencies (m=100 by default)")
+            self.rff_generate(100,dim=shape(X)[1])
         phi=self.rff_expand(X)
         bb=linalg.solve(dot(phi.T,phi)+lmbda*eye(self.rff_num),dot(phi.T,y))
         if Xtst is None:
