@@ -126,7 +126,6 @@ class Kernel(object):
         phi2=self.rff_expand(sample2)
         featuremean1=mean(phi1,axis=0)
         featuremean2=mean(phi2,axis=0)
-        print shape(featuremean1)
         if unbiased:
             nx=shape(phi1)[0]
             ny=shape(phi2)[0]
