@@ -14,7 +14,6 @@ class LinearBagKernel(BagKernel):
         s += "]"
         return s
     
-    @abstractmethod
     def compute_BagKernel_value(self,bag1,bag2):
         innerK=self.data_kernel.kernel(bag1,bag2)
         return np.mean(innerK[:])
