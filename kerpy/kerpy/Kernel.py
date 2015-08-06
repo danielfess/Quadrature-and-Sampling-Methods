@@ -116,3 +116,25 @@ class Kernel(object):
             return sum(sum(K11))/(pow(n,2)-n) + sum(sum(K22))/(pow(m,2)-m) - 2*mean(K12[:])
         else:
             return mean(K11[:])+mean(K22[:])-2*mean(K12[:])
+        
+    @abstractmethod
+    def estimateMMD_rff(self,sample1,sample2,unbiased=False):
+        if self.rff_freq is None:
+            warnings.warn("\nrff_freq has not been set!\nGenerating new random frequencies (m=100 by default)")
+            self.rff_generate(100,dim=shape(sample1)[1])
+        phi1=self.rff_expand(sample1)
+        phi2=self.rff_expand(sample2)
+        featuremean1=mean(phi1,axis=0)
+        featuremean2=mean(phi2,axis=0)
+        print shape(featuremean1)
+        if unbiased:
+            nx=shape(phi1)[0]
+            ny=shape(phi2)[0]
+            first_term=nx/(nx-1.0)*( dot(featuremean1,featuremean1)   \
+                                        -mean(linalg.norm(phi1,axis=1)**2)/nx )
+            second_term=ny/(ny-1.0)*( dot(featuremean2,featuremean2)   \
+                                        -mean(linalg.norm(phi2,axis=1)**2)/ny )
+            third_term=-2*dot(featuremean1,featuremean2)
+            return first_term+second_term+third_term
+        else:
+            return linalg.norm(featuremean1-featuremean2)**2
