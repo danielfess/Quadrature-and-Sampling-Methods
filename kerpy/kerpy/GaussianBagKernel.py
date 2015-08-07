@@ -23,7 +23,8 @@ class GaussianBagKernel(BagKernel):
         '''
         self.data_kernel.rff_generate(mdata,dim=dim)
         self.rff_num=mbags
-        self.rff_freq=randn(mbags/2,mdata)/self.width
+        self.unit_rff_freq=randn(mbags/2,mdata)
+        self.rff_freq=self.unit_rff_freq/self.width
     
     def rff_expand(self,bagX):
         if self.rff_freq is None:

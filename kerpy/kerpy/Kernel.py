@@ -24,7 +24,16 @@ class Kernel(object):
     
     @abstractmethod
     def set_width(self, width):
-        raise NotImplementedError()
+        if hasattr(self, 'width'):
+            warnmsg="\nChanging kernel width from "+str(self.width)+" to "+str(width)
+            warnings.warn(warnmsg)
+            if self.rff_freq is not None:
+                warnmsg="\nrff frequencies found. rescaling to width " +str(width)
+                warnings.warn(warnmsg)
+                self.rff_freq=self.unit_rff_freq/width
+            self.width=width
+        else:
+            raise ValueError("Senseless: kernel has no 'width' attribute!")
     
     @abstractmethod
     def rff_generate(self,m,dim=1):

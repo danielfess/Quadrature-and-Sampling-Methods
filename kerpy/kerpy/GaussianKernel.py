@@ -38,14 +38,6 @@ class GaussianKernel(Kernel):
         K = exp(-0.5 * (sq_dists) / self.width ** 2)
         return K
     
-    def set_width(self, width):
-        warnmsg="\nChanging kernel width from "+str(self.width)+" to "+str(width)
-        warnings.warn(warnmsg)
-        if self.rff_freq is not None:
-            warnmsg="\nrff frequencies found. rescaling to width " +str(width)
-            warnings.warn(warnmsg)
-            self.rff_freq=self.unit_rff_freq/width
-        self.width=width
     
     def gradient(self, x, Y):
         """
