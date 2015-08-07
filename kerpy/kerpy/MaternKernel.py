@@ -9,19 +9,19 @@ from tools.GenericTests import GenericTests
 
 
 class MaternKernel(Kernel):
-    def __init__(self, rho, nu=1.5, sigma=1.0):
+    def __init__(self, width, nu=1.5, sigma=1.0):
         Kernel.__init__(self)
-        #GenericTests.check_type(rho,'rho',float)
+        #GenericTests.check_type(width,'width',float)
         GenericTests.check_type(nu,'nu',float)
         GenericTests.check_type(sigma,'sigma',float)
         
-        self.rho = rho
+        self.width = width
         self.nu = nu
         self.sigma = sigma
     
     def __str__(self):
         s=self.__class__.__name__+ "["
-        s += "rho="+ str(self.rho)
+        s += "width="+ str(self.width)
         s += ", nu="+ str(self.nu)
         s += ", sigma="+ str(self.sigma)
         s += "]"
@@ -39,11 +39,11 @@ class MaternKernel(Kernel):
             dists = cdist(X, Y, 'euclidean')
         if self.nu==0.5:
             #for nu=1/2, Matern class corresponds to Ornstein-Uhlenbeck Process
-            K = (self.sigma**2.) * exp( -dists / self.rho )                 
+            K = (self.sigma**2.) * exp( -dists / self.width )                 
         elif self.nu==1.5:
-            K = (self.sigma**2.) * (1+ sqrt(3.)*dists / self.rho) * exp( -sqrt(3.)*dists / self.rho )
+            K = (self.sigma**2.) * (1+ sqrt(3.)*dists / self.width) * exp( -sqrt(3.)*dists / self.width )
         elif self.nu==2.5:
-            K = (self.sigma**2.) * (1+ sqrt(5.)*dists / self.rho + 5.0*(dists**2.) / (3.0*self.rho**2.) ) * exp( -sqrt(5.)*dists / self.rho )
+            K = (self.sigma**2.) * (1+ sqrt(5.)*dists / self.width + 5.0*(dists**2.) / (3.0*self.width**2.) ) * exp( -sqrt(5.)*dists / self.width )
         else:
             raise NotImplementedError()
         return K
@@ -55,11 +55,11 @@ class MaternKernel(Kernel):
         
         if self.nu==1.5 or self.nu==2.5:
             x_2d=reshape(x, (1, len(x)))
-            lower_order_rho = self.rho * sqrt(2*(self.nu-1)) / sqrt(2*self.nu)
-            lower_order_kernel = MaternKernel(lower_order_rho,self.nu-1,self.sigma)
+            lower_order_width = self.width * sqrt(2*(self.nu-1)) / sqrt(2*self.nu)
+            lower_order_kernel = MaternKernel(lower_order_width,self.nu-1,self.sigma)
             k = lower_order_kernel.kernel(x_2d, Y)
             differences = Y - x
-            G = ( 1.0 / lower_order_rho ** 2 ) * (k.T * differences)
+            G = ( 1.0 / lower_order_width ** 2 ) * (k.T * differences)
             return G
         else:
             raise NotImplementedError()
