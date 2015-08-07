@@ -2,11 +2,13 @@ from kerpy.Kernel import Kernel
 from numpy import exp, shape, reshape, sqrt, median
 from numpy.random import permutation,randn
 from scipy.spatial.distance import squareform, pdist, cdist
+import warnings
+from tools.GenericTests import GenericTests
 
 class GaussianKernel(Kernel):
     def __init__(self, sigma):
         Kernel.__init__(self)
-        
+        GenericTests.check_type(sigma,'sigma',float)
         self.width = sigma
     
     def __str__(self):
@@ -32,9 +34,18 @@ class GaussianKernel(Kernel):
             assert(len(shape(Y))==2)
             assert(shape(X)[1]==shape(Y)[1])
             sq_dists = cdist(X, Y, 'sqeuclidean')
-    
+        
         K = exp(-0.5 * (sq_dists) / self.width ** 2)
         return K
+    
+    def set_width(self, width):
+        warnmsg="\nChanging kernel width from "+str(self.width)+" to "+str(width)
+        warnings.warn(warnmsg)
+        if self.rff_freq is not None:
+            warnmsg="\nrff frequencies found. rescaling to width " +str(width)
+            warnings.warn(warnmsg)
+            self.rff_freq=self.unit_rff_freq/width
+        self.width=width
     
     def gradient(self, x, Y):
         """
@@ -60,7 +71,8 @@ class GaussianKernel(Kernel):
     
     def rff_generate(self,m,dim=1):
         self.rff_num=m
-        self.rff_freq=randn(m/2,dim)/self.width
+        self.unit_rff_freq=randn(m/2,dim)
+        self.rff_freq=self.unit_rff_freq/self.width
     
     @staticmethod
     def get_sigma_median_heuristic(X):
@@ -71,11 +83,3 @@ class GaussianKernel(Kernel):
         median_dist=median(dists[dists>0])
         sigma=median_dist/sqrt(2.)
         return sigma
-    
-if __name__ == '__main__':
-    kernel=GaussianKernel(2.0)
-    dim=3
-    kernel.rff_generate(100, dim=dim)
-    X=randn(50,dim)
-    phi=kernel.rff_expand(X)
-    print shape(phi)

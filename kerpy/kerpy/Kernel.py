@@ -6,6 +6,7 @@ from numpy.lib.index_tricks import fill_diagonal
 from matplotlib.pyplot import imshow,show
 import numpy as np
 import warnings
+from sklearn import cross_validation
 
 class Kernel(object):
     def __init__(self):
@@ -19,6 +20,10 @@ class Kernel(object):
     
     @abstractmethod
     def kernel(self, X, Y=None):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def set_width(self, width):
         raise NotImplementedError()
     
     @abstractmethod
@@ -66,18 +71,21 @@ class Kernel(object):
     
     
     @abstractmethod
-    def ridge_regress(self,X,y,lmbda=0.01,Xtst=None):
+    def ridge_regress(self,X,y,lmbda=0.01,Xtst=None,ytst=None):
         K=self.kernel(X)
         n=shape(K)[0]
         aa=linalg.solve(K+lmbda*eye(n),y)
         if Xtst is None:
             return aa
         else:
-            ytst=dot(aa,self.kernel(X,Xtst))
-            return aa,ytst
+            ypre=dot(aa,self.kernel(X,Xtst))
+            if ytst is None:
+                return aa,ypre
+            else:
+                return aa,ypre,mean(linalg.norm(ytst-ypre)**2)
     
     @abstractmethod
-    def ridge_regress_rff(self,X,y,lmbda=0.01,Xtst=None):
+    def ridge_regress_rff(self,X,y,lmbda=0.01,Xtst=None,ytst=None):
         if self.rff_freq is None:
             warnings.warn("\nrff_freq has not been set!\nGenerating new random frequencies (m=100 by default)")
             self.rff_generate(100,dim=shape(X)[1])
@@ -87,8 +95,38 @@ class Kernel(object):
             return bb
         else:
             phitst=self.rff_expand(Xtst)
-            ytst=dot(phitst,bb)
-            return bb,ytst
+            ypre=dot(phitst,bb)
+            if ytst is None:
+                return bb,ypre
+            else:
+                return bb,ypre,mean(linalg.norm(ytst-ypre)**2)
+    
+    @abstractmethod
+    def xvalidate( self,X,y, method = 'ridge_regress',  \
+                                    lmbda_grid=(1+arange(25))/200.0,  \
+                                    width_grid=exp(-13+arange(25)),  \
+                                    numFolds = 10  ):
+        which_method = getattr(self,method)
+        n=len(X)
+        kf=cross_validation.KFold(n,n_folds=numFolds)
+        xvalerr=zeros((len(lmbda_grid),len(width_grid)))
+        width_idx=0
+        for width in width_grid:
+            self.set_width(width)
+            lmbda_idx=0
+            for lmbda in lmbda_grid:
+                fold = 0
+                prederr = zeros(numFolds)
+                for train_index, test_index in kf:
+                    X_train, X_test = X[train_index], X[test_index]
+                    y_train, y_test = y[train_index], y[test_index]
+                    _,_,prederr[fold]=which_method(X_train,y_train,lmbda=lmbda,Xtst=X_test,ytst=y_test)
+                    fold+=1
+                xvalerr[lmbda_idx,width_idx]=mean(prederr)
+                lmbda_idx+=1
+            width_idx+=1
+        min_idx = np.unravel_index(np.argmin(xvalerr),shape(xvalerr))
+        return lmbda_grid[min_idx[0]],width_grid[min_idx[1]]
     
     @abstractmethod
     def estimateMMD(self,sample1,sample2,unbiased=False):
