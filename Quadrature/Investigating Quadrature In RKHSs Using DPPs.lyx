@@ -1,0 +1,1426 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+theorems-ams-bytype
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\LL}{L_{2}\left(d\rho\right)}
+{L_{2}\left(d\rho\right)}
+\end_inset
+
+
+\begin_inset FormulaMacro
+\newcommand{\Hk}{\mathcal{H}_{k}}
+{\mathcal{H}_{k}}
+\end_inset
+
+
+\begin_inset FormulaMacro
+\newcommand{\mukg}{\mu_{k,g}}
+{\mu_{k,g}}
+\end_inset
+
+
+\begin_inset FormulaMacro
+\newcommand{\iid}{\overset{iid}{\sim}}
+{\overset{iid}{\sim}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Investigating Quadrature In RKHSs Using DPPs
+\end_layout
+
+\begin_layout Author
+Daniel Fess
+\end_layout
+
+\begin_layout Standard
+This work follows on from Francis Bach's paper: On the Equivalence between
+ Quadrature Rules and Random Features, and uses material from notes produced
+ by Dino Sejdinovic.
+\end_layout
+
+\begin_layout Standard
+We consider a similar setup of the quadrature problem in an RKHS but with
+ new sampling techniques.
+\end_layout
+
+\begin_layout Standard
+Rough guide to structure:
+\end_layout
+
+\begin_layout Standard
+Setup quad problem
+\end_layout
+
+\begin_layout Standard
+Lambda
+\end_layout
+
+\begin_layout Standard
+Optimal
+\end_layout
+
+\begin_layout Standard
+DPPs - introduction
+\end_layout
+
+\begin_layout Standard
+Optimal link to DPPs
+\end_layout
+
+\begin_layout Standard
+Computational
+\end_layout
+
+\begin_layout Standard
+Optimal distributions
+\end_layout
+
+\begin_layout Standard
+Resampling
+\end_layout
+
+\begin_layout Standard
+Quadrature methods
+\end_layout
+
+\begin_layout Standard
+Comparing methods
+\end_layout
+
+\begin_layout Standard
+Conclusions
+\end_layout
+
+\begin_layout Section
+Bach's quadrature with importance sampling
+\end_layout
+
+\begin_layout Standard
+This section is based on 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Bach2015"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+\noindent
+The Classical Quadrature Problem in an RKHS
+\end_layout
+
+\begin_layout Standard
+\noindent
+We work in a space 
+\begin_inset Formula $\mathcal{{X}}$
+\end_inset
+
+ with probability measure 
+\begin_inset Formula $d\rho$
+\end_inset
+
+, equipped with an RKHS of functions 
+\begin_inset Formula $\Hk$
+\end_inset
+
+.
+ The kernel 
+\begin_inset Formula $k(x,y)$
+\end_inset
+
+ giving rise to this RKHS has integral operator 
+\begin_inset Formula $T_{k}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\noindent
+We would like to compute, for 
+\begin_inset Formula $g\in L_{2}(d\rho)$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\rho_{g}\left[h\right]=\int h(x)g(x)d\rho(x)=\left\langle h,\mu_{k,g}\right\rangle _{\mathcal{H}_{k}}.
+\]
+
+\end_inset
+
+
+\begin_inset Formula $\mu_{k,g}\in\mathcal{H}_{k}$
+\end_inset
+
+ is the convolution with 
+\begin_inset Formula $k$
+\end_inset
+
+, given by: 
+\begin_inset Formula 
+\[
+\mu_{k,g}=\int k(\cdot,x)g(x)d\rho(x)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+We consider estimators of form 
+\begin_inset Formula $\tilde{\rho}_{g}\left[h\right]=\sum_{i=1}^{n}\alpha_{i}h(x_{i})$
+\end_inset
+
+ or equivalently the estimators of 
+\begin_inset Formula $\mu_{g}$
+\end_inset
+
+ of form 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\tilde{\mu}_{k,g}=\sum_{i=1}^{n}\alpha_{i}k(\cdot,x_{i})$
+\end_inset
+
+.
+ From Cauchy-Schwarz
+\begin_inset Formula 
+\begin{eqnarray*}
+\sup_{\left\Vert h\right\Vert _{\mathcal{H}_{k}}\leq1}\left|\tilde{\rho}_{g}\left[h\right]-\rho_{g}\left[h\right]\right| & = & \left\Vert \tilde{\mu}_{k,g}-\mu_{k,g}\right\Vert _{\mathcal{H}_{k}}.
+\end{eqnarray*}
+
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+Let us fix the choice 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\left\{ x_{i}\right\} $
+\end_inset
+
+.
+ We can find 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ by solving
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula 
+\begin{align}
+\arg\min_{\alpha}\left\Vert \sum_{i=1}^{n}\alpha_{i}k(\cdot,x_{i})-\mu_{k,g}\right\Vert _{\mathcal{H}_{k}}^{2}+n\lambda\left\Vert \alpha\right\Vert _{2}^{2}=\nonumber \\
+\quad\arg\min_{\alpha}\alpha^{\top}\left(K+n\lambda I\right)\alpha-2\alpha^{\top}\mu_{k,g}\left(\mathbf{x}\right)\label{eq:alpha_opt}
+\end{align}
+
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+which has solution 
+\begin_inset Formula $\alpha=\left(K+n\lambda I\right)^{-1}\mu_{k,g}\left(\mathbf{x}\right)$
+\end_inset
+
+.
+ We will return later to consider the effect of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+\noindent
+Bach's quadrature problem
+\end_layout
+
+\begin_layout Standard
+\noindent
+In Bach's paper, he considers a more general setup where 
+\series bold
+x
+\series default
+ is drawn according to an importance sampling distribution with density
+ 
+\begin_inset Formula $q$
+\end_inset
+
+ 
+\begin_inset Formula $d\rho$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\noindent
+We will draw samples 
+\begin_inset Formula $\left\{ x_{i}\right\} _{i=1}^{n}\sim qd\rho$
+\end_inset
+
+.
+ We will aim for an estimator of the form 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\tilde{\rho}_{g}\left[h\right]=\sum_{i=1}^{n}\frac{\beta_{i}}{\sqrt{q(x_{i})}}h(x_{i})$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+.
+ This results in an optimization problem slightly different from 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:alpha_opt"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula 
+\begin{align*}
+\arg\min_{\beta}\left\Vert \sum_{i=1}^{n}\frac{\beta_{i}}{\sqrt{q(x_{i})}}k(\cdot,x_{i})-\mu_{k,g}\right\Vert _{\mathcal{H}_{k}}^{2}+n\lambda\left\Vert \beta\right\Vert _{2}^{2}=\\
+\quad\arg\min_{\beta}\beta^{\top}\left(\tilde{K}_{q}+n\lambda I\right)\beta-2\beta^{\top}\left(q\left(x_{i}\right)^{-1/2}\mukg\left(x_{i}\right)\right)_{i=1}^{n},
+\end{align*}
+
+\end_inset
+
+with solution
+\begin_inset Formula 
+\begin{eqnarray}
+\beta & = & \left(\tilde{K}_{q}+n\lambda I\right)^{-1}\left(q\left(x_{i}\right)^{-1/2}\mukg\left(x_{i}\right)\right)_{i=1}^{n}\label{eq:Bach_weights}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+where 
+\begin_inset Formula $\tilde{K}_{q}$
+\end_inset
+
+ is a modified Kernel matrix given by 
+\begin_inset Formula $\left[\tilde{K}_{q}\right]_{ij}=\frac{k(x_{i},x_{j})}{\sqrt{q(x_{i})q(x_{j})}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\noindent
+This expression for 
+\begin_inset Formula $\beta$
+\end_inset
+
+ is equivalent to the following:
+\end_layout
+
+\begin_layout Standard
+\noindent
+For each 
+\begin_inset Formula $i=1,...,n$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{j=1}^{n}\left[\tilde{K}_{q}+n\lambda I\right]_{ij}\beta_{j} & = & q\left(x_{i}\right)^{-1/2}\mukg\left(x_{i}\right)\\
+\sum_{j=1}^{n}\left(\frac{k(x_{i},x_{j})}{\sqrt{q(x_{i})q(x_{j})}}+n\lambda\delta_{ij}\right)\beta_{j} & = & q\left(x_{i}\right)^{-1/2}\mukg\left(x_{i}\right)\\
+\sum_{j=1}^{n}\left(k(x_{i},x_{j})+n\lambda\delta_{ij}.\sqrt{q(x_{i})q(x_{j})}\right)\frac{\beta_{j}}{\sqrt{q(x_{j})}} & = & \mu_{k,g}(x_{i})\\
+\sum_{j=1}^{n}\left(k(x_{i},x_{j})+n\lambda\delta_{ij}q(x_{i})\right)\frac{\beta_{j}}{\sqrt{q(x_{j})}} & = & \mu_{k,g}(x_{i})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+So if we let 
+\begin_inset Formula $\tilde{\beta_{j}}=\frac{\beta_{j}}{\sqrt{q(x_{j})}}$
+\end_inset
+
+, we have 
+\begin_inset Formula $\tilde{\beta}=\left(K+n\lambda.diag(q(\mathbf{x}))\right)^{-1}\mu_{k,g}(\mathbf{x})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Note that we now have 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\tilde{\rho}_{g}\left[h\right]=\sum_{i=1}^{n}\tilde{\beta_{i}}h(x_{i})$
+\end_inset
+
+, which simplifies implementation.
+\end_layout
+
+\begin_layout Subsection
+\noindent
+The Role of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula $\lambda$
+\end_inset
+
+ acts as a regularisation parameter in the minimisation problem.
+\begin_inset Formula 
+\[
+\min_{\beta}\left\Vert \sum_{i=1}^{n}\frac{\beta_{i}}{\sqrt{q(x_{i})}}k(\cdot,x_{i})-\mu_{k,g}\right\Vert _{\mathcal{H}_{k}}^{2}+n\lambda\left\Vert \beta\right\Vert _{2}^{2}
+\]
+
+\end_inset
+
+However, it also plays a role in controlling the error in our quadrature,
+ as the following proposition from 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Bach2015"
+
+\end_inset
+
+ outlines.
+ Note that the statement of the proposition contains some unfamiliar characters,
+ as Bach's paper looks at the quadrature problem in a more general setting,
+ of which the RKHS setting is a subcase.
+\end_layout
+
+\begin_layout Proposition
+\noindent
+For 
+\begin_inset Formula $\lambda>0$
+\end_inset
+
+, we denote by 
+\begin_inset Formula $d_{max}(q,\lambda)=\underset{v\in\mathcal{{V}}}{sup}\,\,\frac{1}{q(v)}\left\langle \varphi(v,\cdotp),(\Sigma+\lambda I)^{-1}\varphi(v,\cdotp)\right\rangle _{L_{2}(d\rho)}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $v_{1},\ldots,v_{n}$
+\end_inset
+
+ be sampled i.i.d.
+ from the distribution with positive density q with respect to 
+\begin_inset Formula $d\mu$
+\end_inset
+
+, then for any 
+\begin_inset Formula $\delta>0$
+\end_inset
+
+, if 
+\begin_inset Formula $n\geqslant4+6d_{max}(q,\lambda)log\frac{4d_{max}(q,\lambda)}{\delta}$
+\end_inset
+
+, with probability greater than 
+\begin_inset Formula $1-\delta$
+\end_inset
+
+, we have
+\begin_inset Formula 
+\[
+\underset{\left\Vert f\right\Vert _{\mathcal{{F}}}\leqslant1}{sup}\,\,\,\,\underset{\left\Vert \beta\right\Vert _{2}^{2}\leqslant\frac{4}{n}}{inf}\left\Vert f-\sum_{i=1}^{n}\beta_{i}q(v_{i})^{-1/2}\varphi(v_{i},\cdotp)\right\Vert _{L_{2}(d\rho)}^{2}\leqslant4\lambda
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+EDITING NOTE: Tweak proposition so that it makes sense only in RKHS setting?
+ What is 
+\begin_inset Formula $\varphi(\cdotp,\cdotp)$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+\noindent
+In the RKHS setting, 
+\begin_inset Formula $\varphi(\cdotp,x)=T_{k}^{-1/2}I_{k}k(\cdotp,x)$
+\end_inset
+
+, 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ is the integral operator of the kernel 
+\begin_inset Formula $k(x,y)$
+\end_inset
+
+, 
+\begin_inset Formula $\mu=\rho$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathcal{\mathcal{{V}=\mathcal{{X}}}}$
+\end_inset
+
+??
+\end_layout
+
+\begin_layout Standard
+\noindent
+So 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ corresponds to the error level, but note here the norm is the 
+\begin_inset Formula $L_{2}$
+\end_inset
+
+ norm, whereas in the minimization problem we use the RKHS norm.
+ Note also that bounding 
+\begin_inset Formula $\beta$
+\end_inset
+
+ in the proposition ensures robustness to regularisation.
+\end_layout
+
+\begin_layout Subsection
+\noindent
+Bach's Optimal Distribution
+\end_layout
+
+\begin_layout Standard
+\noindent
+Once we have fixed 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, Bach's optimal distribution minimizes 
+\begin_inset Formula $d_{max}(q,\lambda)$
+\end_inset
+
+, and thus gives the lowest bound on n for which Proposition 1 applies.
+ Bach gives an explicit formula for this distribution:
+\begin_inset Formula 
+\[
+q(v)=\frac{\left\langle \varphi(v,\cdotp),(\Sigma+\lambda I)^{-1}\varphi(v,\cdotp)\right\rangle _{L_{2}(d\rho)}}{tr\Sigma(\Sigma+\lambda I)^{-1}}
+\]
+
+\end_inset
+
+for which 
+\begin_inset Formula $d_{max}(q,\lambda)=d(\lambda)=tr\Sigma(\Sigma+\lambda I)^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\noindent
+In the RKHS setting, for a kernel with Mercer decomposition 
+\begin_inset Formula $k(x,y)$
+\end_inset
+
+= 
+\begin_inset Formula $\sum_{n=1}^{\infty}\mu_{n}e_{n}(x)e_{n}(y)$
+\end_inset
+
+, we have 
+\begin_inset Formula $q(x)\propto k_{\lambda}(x,x)=\sum_{n=1}^{\infty}\frac{\mu_{n}}{\mu_{n}+\lambda}e_{n}(x)^{2}$
+\end_inset
+
+, where 
+\begin_inset Formula $k_{\lambda}(x,y)$
+\end_inset
+
+ is the kernel of the operator 
+\begin_inset Formula $T_{k}(T_{k}+\lambda I)^{-1}$
+\end_inset
+
+.
+ For details of this derivation please refer to D.
+ Sejdinovic's notes.
+\end_layout
+
+\begin_layout Section
+Introducing DPPs
+\end_layout
+
+\begin_layout Subsection
+Introductory Theory
+\end_layout
+
+\begin_layout Standard
+A Determinantal Point Process is a probability measure over subsets of a
+ ground set 
+\begin_inset Formula $\mathcal{{Y}}$
+\end_inset
+
+.
+ We shall only consider the case where 
+\begin_inset Formula $\mathcal{{Y}}$
+\end_inset
+
+ is discrete (wlog of size n), and look at a particular type of DPP called
+ an L-ensemble.
+ The structure of an 
+\begin_inset Formula $L$
+\end_inset
+
+-ensemble is given by a real, symmetric, n x n, positive semi-definite matrix
+ 
+\begin_inset Formula $L$
+\end_inset
+
+, known as the kernel.
+ For any 
+\begin_inset Formula $Y\subseteq\mathcal{{Y}},P(Y)\propto det(L_{Y})$
+\end_inset
+
+, where 
+\begin_inset Formula $L_{Y}$
+\end_inset
+
+ is the sub matrix of 
+\begin_inset Formula $L$
+\end_inset
+
+ formed from the rows and columns corresponding to the elements of 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ In fact, it is true that
+\begin_inset Formula $P(Y)=det(L_{Y})/det(L+I)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We can introduce a matrix 
+\begin_inset Formula $K=L(L+I)^{-1}$
+\end_inset
+
+.
+ It can be shown that this matrix has the neat property 
+\begin_inset Formula $P(A\subseteq\mathbf{Y})=det(K_{A})$
+\end_inset
+
+, where 
+\begin_inset Formula $\mathbf{Y}$
+\end_inset
+
+ is a random subset chosen according to a DPP with kernel 
+\begin_inset Formula $L$
+\end_inset
+
+.
+ For this reason, K is called the marginal kernel.
+\end_layout
+
+\begin_layout Standard
+Some simple properties arising from this description of the DPP are:
+\begin_inset Formula 
+\[
+P\left(i\in\mathbf{Y}\right)=K{}_{ii}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+P\left(i,j\in\mathbf{Y}\right) & = & K_{ii}K_{jj}-K_{ij}^{2}\\
+ & = & P(i\in\mathbf{Y})P(j\in\mathbf{Y})-K_{ij}^{2}
+\end{eqnarray*}
+
+\end_inset
+
+So the diagonal entries represent the probability of an element appearing
+ in a random subset, and the off-diagonal entries encode repulsion between
+ elements.
+ This is one of the key properties of DPPs and why they are attractive to
+ us - they model global, negative correlation, and a sample from a DPP is
+ usually diverse.
+\end_layout
+
+\begin_layout Subsection
+DPPs and Bach's Paper
+\end_layout
+
+\begin_layout Standard
+In Bach's paper he samples from an importance sampling distribution 
+\begin_inset Formula $q$
+\end_inset
+
+ 
+\begin_inset Formula $d\rho$
+\end_inset
+
+, and for each quadrature problem gives a specific optimal distribution.
+ We shall investigate the case when we sample according to a DPP and compare
+ our results to Bach.
+\end_layout
+
+\begin_layout Standard
+The reason behind this is that (given the setup in 
+\series bold
+1.2
+\series default
+), if we take a finite set of points 
+\begin_inset Formula $\{x_{1},...,x_{n}\}$
+\end_inset
+
+, the optimal distribution evaluated on these points is proportional to
+ the marginal probabilities 
+\begin_inset Formula $P(i\in\mathbf{Y})$
+\end_inset
+
+ where 
+\begin_inset Formula $\mathbf{Y}$
+\end_inset
+
+ is distributed according to a DPP with kernel 
+\begin_inset Formula $\frac{1}{\lambda}K$
+\end_inset
+
+, where 
+\begin_inset Formula $K$
+\end_inset
+
+ is the (RKHS) kernel matrix: 
+\begin_inset Formula $K_{ij}=k(x_{i},x_{j})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note that there is potential for confusion here: the kernel 
+\begin_inset Formula $L$
+\end_inset
+
+ of the DPP is equal to 
+\begin_inset Formula $\frac{1}{\lambda}K$
+\end_inset
+
+, and the marginal kernel, which records the marginal probabilities, is
+ equal to 
+\begin_inset Formula $\frac{1}{\lambda}K(\frac{1}{\lambda}K+I)^{-1}=K(K+\lambda I)^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Furthermore, the repulsive properties of the DPP make it seem intuitively
+ well-suited to the quadrature problem - we would like our points to be
+ spread out, in order not to over- or under-estimate any part of the function.
+\end_layout
+
+\begin_layout Subsection
+n-DPPs
+\end_layout
+
+\begin_layout Standard
+Drawing a set from a DPP can result in a set of any size (but clearly no
+ larger than the ground set 
+\begin_inset Formula $\mathcal{{Y}}$
+\end_inset
+
+.
+ n-DPPs are DPPs where we condition on the size n of the set.
+ When we compare quadrature with sampling from a DPP to, for example, sampling
+ from Bach's optimal distribution, it helps to fix n so that we can directly
+ compare the two methods, with all other variables being equal.
+ There are efficient algorithms for directly sampling according to an n-DPP
+ - these can be found online and are the work of Alex Kulesza/Ben Taskar.
+\end_layout
+
+\begin_layout Section
+Computational Work
+\end_layout
+
+\begin_layout Subsection
+Bach's Optimal Distribution
+\end_layout
+
+\begin_layout Standard
+We know that 
+\begin_inset Formula $q(x)\propto k_{\lambda}(x,x)=\sum_{n=1}^{\infty}\frac{\mu_{n}}{\mu_{n}+\lambda}e_{n}(x)^{2}$
+\end_inset
+
+, where 
+\begin_inset Formula $\{e_{n},\mu_{n}\}$
+\end_inset
+
+ are eigenfunction-eigenvalue pairs for the integral operator of 
+\begin_inset Formula $k(x,y)$
+\end_inset
+
+, 
+\begin_inset Formula $T_{k}:\LL\rightarrow\LL$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Only in some cases do we know the Mercer Decomposition of the kernel, and
+ even in these cases 
+\begin_inset Formula $q(x)$
+\end_inset
+
+ will rarely have a closed form.
+ In my work, where possible, I have truncated the infinite sum after a sufficien
+t number of terms, evaluated this finite sum on a fine grid of 
+\begin_inset Formula $\mathcal{{X}}$
+\end_inset
+
+, and normalised appropriately.
+ Usually this has involved tweaking 
+\begin_inset Formula $q(x)$
+\end_inset
+
+ so it is piecewise constant, and then normalising; we want to know 
+\begin_inset Formula $q$
+\end_inset
+
+ everywhere, but in reality we only know it on our fine grid - in performing
+ this tweak we circumvent the problem.
+ It is relatively straight-forward to sample from the resulting piecewise
+ constant density.
+\end_layout
+
+\begin_layout Subsubsection
+Effect of Lambda
+\end_layout
+
+\begin_layout Standard
+As well as investigating the performance of variations on the quadrature
+ problem, I have spent a small amount of time looking into how Bach's optimal
+ distribution varies with 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+ I have considered the case with squared exponential (or Gaussian RBF) kernel
+ and gaussian measure (on 
+\begin_inset Formula $\mathbb{R}$
+\end_inset
+
+), and the case with Brownian covariance kernel and U[0,1] measure.
+ In the first case, the optimal distribution widens and flattens out as
+ 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ decreases, diverging from any normal distribution, and in particular from
+ the measure, whereas in the second case the optimal distribution clearly
+ converges to U[0,1] as 
+\begin_inset Formula $\lambda$
+\end_inset
+
+decreases.
+ (See powerpoint/PDF figures for images - brownian_lambda_comparison.pdf,
+ gaussian_lambda_comparison.pdf).
+ Perhaps the optimal distribution 'likes' to flatten out and spread itself
+ out as evenly as possible as 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ decreases.
+ Intriguing - and it begs further investigation.
+\end_layout
+
+\begin_layout Subsection
+Approximating the Optimal Distribution
+\end_layout
+
+\begin_layout Standard
+For the cases where we don't have the Mercer Decomposition of 
+\begin_inset Formula $k(x,y)$
+\end_inset
+
+, we outline a method to approximately sample from 
+\begin_inset Formula $q(x)$
+\end_inset
+
+ (density wrt 
+\begin_inset Formula $\rho$
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $q(x)\propto k_{\lambda}(x,x)$
+\end_inset
+
+, where 
+\begin_inset Formula $k_{\lambda}(x,y)$
+\end_inset
+
+ is the kernel of the operator 
+\begin_inset Formula $T_{k}(T_{k}+\lambda I)^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Draw a set of points 
+\series bold
+x
+\series default
+ of size N according to 
+\begin_inset Formula $\rho$
+\end_inset
+
+, where N is sufficiently large.
+\end_layout
+
+\begin_layout Enumerate
+Construct the (RKHS) kernel matrix given by 
+\begin_inset Formula $K_{ij}=k(x_{i},x_{j})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+For large N, 
+\begin_inset Formula $K(K+\lambda I)^{-1}$
+\end_inset
+
+ approximates 
+\begin_inset Formula $T_{k}(T_{k}+\lambda I)^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Subsample from 
+\series bold
+x
+\series default
+ without replacement according to the mass function 
+\begin_inset Formula $P(x_{i})=\frac{[K\left(K+\lambda I\right)^{-1}]_{ii}}{tr(K(K+\lambda I)^{-1})}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Sampling from an n-DPP
+\end_layout
+
+\begin_layout Standard
+We start by sampling N points from 
+\begin_inset Formula $\rho$
+\end_inset
+
+, where N is sufficiently large.
+ We construct a DPP on these N points, with kernel 
+\begin_inset Formula $\frac{1}{\lambda}K$
+\end_inset
+
+ and, hence, marginal kernel 
+\begin_inset Formula $K(K+\lambda I)^{-1}$
+\end_inset
+
+.
+ Using code written by Kulesza/Taskar, we sample according to an n-DPP.
+ This code is available online.
+\end_layout
+
+\begin_layout Standard
+Note that sampling from an n-DPP is independent of the value of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ (provided it is non-zero).
+ Decreasing lambda makes larger sets more likely to appear, but does not
+ have an effect when comparing the probabilities of sets of the same size.
+ For details, see D.
+ Sejdinovic's notes.
+\end_layout
+
+\begin_layout Subsection
+Implementing the Quadrature
+\end_layout
+
+\begin_layout Standard
+Assume now that 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is fixed, 
+\begin_inset Formula $g\equiv1$
+\end_inset
+
+ and we have a function 
+\begin_inset Formula $h(x)$
+\end_inset
+
+ we wish to integrate wrt 
+\begin_inset Formula $\rho$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We shall study four methods, which differ in their sampling method:
+\end_layout
+
+\begin_layout Enumerate
+Sampling from 
+\begin_inset Formula $\rho$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Sampling from an n-DPP
+\end_layout
+
+\begin_layout Enumerate
+Sampling from Bach's optimal distribution, 
+\begin_inset Formula $q_{\lambda}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+'Resampling' - approximately sampling from Bach's optimal distribution,
+ 
+\begin_inset Formula $q_{\lambda}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once we have sampled our points we wish to construct the weights 
+\begin_inset Formula $\tilde{\beta}=\left(K+n\lambda.diag(q(\mathbf{x}))\right)^{-1}\mu_{k,g}(\mathbf{x})$
+\end_inset
+
+ and perform the quadrature 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\tilde{\rho}_{g}\left[h\right]=\sum_{i=1}^{n}\tilde{\beta_{i}}h(x_{i})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Two problems arise:
+\end_layout
+
+\begin_layout Enumerate
+Computing the mean embedding 
+\begin_inset Formula $\mukg(\mathbf{\cdotp})=\intop k(\cdotp,x)g(x)d\rho(x)=\int k(\cdotp,x)d\rho(x)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+When sampling from an n-DPP or Resampling to approximate 
+\begin_inset Formula $q_{\lambda}$
+\end_inset
+
+, what is the importance sampling distribution 
+\begin_inset Formula $q$
+\end_inset
+
+ 
+\begin_inset Formula $d\rho$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+For the first problem, in some cases the mean embedding has a closed form,
+ and in others we can use straight-forward Monte Carlo integration to estimate
+ it.
+ Say we have sampled 
+\begin_inset Formula $x_{1},...,x_{n}$
+\end_inset
+
+ according to one of our four methods, then we sample 
+\begin_inset Formula $X_{1},...,X_{M}$
+\end_inset
+
+ from 
+\begin_inset Formula $\rho$
+\end_inset
+
+ and 
+\begin_inset Formula $\mukg(x_{i})\approx\frac{1}{M}\sum_{m=1}^{M}k(x_{i},X_{m})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For the second problem, the jury's still out.
+ For both cases, using 
+\begin_inset Formula $q(x_{i})=P(x_{i})=\frac{[K\left(K+\lambda I\right)^{-1}]_{ii}}{tr(K(K+\lambda I)^{-1})}$
+\end_inset
+
+ seems to give good convergence, but it's not a density since it's only
+ defined on a finite set of points, and it could be awkward to extend to
+ a density given that the set it's defined on is random (drawn from 
+\begin_inset Formula $\rho$
+\end_inset
+
+).
+ For the n-DPP case I have mostly used 
+\begin_inset Formula $q(x_{i})=\frac{[K\left(K+I\right)^{-1}]_{ii}}{tr(K(K+I)^{-1})}$
+\end_inset
+
+, but not necessarily when 
+\begin_inset Formula $\lambda=1$
+\end_inset
+
+, and it has generally provided good convergence.
+ These mass functions are proportional to the marginals of a DPP, when really
+ we are drawing from an n-DPP, so perhaps the choice of 
+\begin_inset Formula $q$
+\end_inset
+
+ should reflect that.
+ Or perhaps the role of 
+\begin_inset Formula $q$
+\end_inset
+
+ is not relevant in these situations and a different approach should be
+ considered - maybe the Bayesian Quadrature approach.
+\end_layout
+
+\begin_layout Subsection
+Comparison of different sampling methods
+\end_layout
+
+\begin_layout Standard
+We will now look at the convergence of the error with respect to the number
+ of points used in quadrature, n.
+ More specifically, for 
+\begin_inset Formula $I$
+\end_inset
+
+ the integral of our function, 
+\begin_inset Formula $A$
+\end_inset
+
+ our estimate of the integral, 
+\begin_inset Formula $Error=\left|A-I\right|$
+\end_inset
+
+, we consider log10(sqrt(average(squared error))), which is in some sense
+ the log (base 10) of the average of errors, where we have performed quadrature
+ for many functions from the RKHS and this is what we average over, for
+ fixed n.
+\end_layout
+
+\begin_layout Subsubsection
+Sobolev space s=1 kernel / U[0,1] measure / 
+\begin_inset Formula $\lambda=0$
+\end_inset
+
+ - Drawing from 
+\begin_inset Formula $\rho$
+\end_inset
+
+ vs.
+ classical quadrature rules
+\end_layout
+
+\begin_layout Standard
+See sobolev_comparison.pdf to compare drawing from 
+\begin_inset Formula $\rho$
+\end_inset
+
+ to the classical methods of Gauss-Legendre, Simpson and Sobol.
+ Drawing from 
+\begin_inset Formula $\rho$
+\end_inset
+
+ and weighting as detailed previously is outperformed by G-L and Simpson,
+ although almost all functions in this space are very well behaved (differentiab
+le, bounded) - the setting in which Simpson and G-L perform well, so this
+ is to be expected.
+ We hope n-DPP can at least close the gap on the classical methods.
+\end_layout
+
+\begin_layout Subsubsection
+Sobolev space s=1 kernel / U[0,1] measure / 
+\begin_inset Formula $\lambda=0$
+\end_inset
+
+ - Drawing from 
+\begin_inset Formula $\rho$
+\end_inset
+
+ vs.
+ n-DPP
+\end_layout
+
+\begin_layout Standard
+See DPPKernel2.pdf.
+ n-DPP with kernel K outperforms drawing from 
+\begin_inset Formula $\rho=U[0,1]$
+\end_inset
+
+, as we had hoped.
+ The n-DPP method is significantly slower, however.
+\end_layout
+
+\begin_layout Subsubsection
+Sobolev space s=1 kernel / Beta(0.5, 0.5) measure / 
+\begin_inset Formula $\lambda=0$
+\end_inset
+
+ - Drawing from 
+\begin_inset Formula $\rho$
+\end_inset
+
+ vs.
+ n-DPP vs.
+ classical methods
+\end_layout
+
+\begin_layout Standard
+See beta_new2.pdf.
+ Ignore Resample 1 and Resample 0.01 - these only make sense when 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ = 1 or 0.01 (respectively), so here they mean nothing for what we are investigat
+ing, despite the fact that they show fast convergence.
+\end_layout
+
+\begin_layout Standard
+Interestingly, Simpson and G-L struggle here, supposedly because the measure
+ is now awkward, tending to 
+\begin_inset Formula $\infty$
+\end_inset
+
+ near 0 and 1; G-L places many points near 0 and 1, Simpson cannot place
+ points at 0 and 1 (since the integrand is infinite there), and functions
+ are not bounded in this space.
+ We don't bother with Sobol since it doesn't compete with other methods.
+\end_layout
+
+\begin_layout Standard
+n-DPP with kernel K again performs better than drawing from the ambient
+ measure, but with the caveat of more computational effort.
+\end_layout
+
+\begin_layout Subsubsection
+Brownian covariance kernel / U[0,1] measure / 
+\begin_inset Formula $\lambda=0$
+\end_inset
+
+ - Drawing from 
+\begin_inset Formula $\rho$
+\end_inset
+
+ vs.
+ n-DPP
+\end_layout
+
+\begin_layout Standard
+Here the kernel is k(x,y) = min{x,y}.
+ n-DPP outperforms drawing from 
+\begin_inset Formula $\rho$
+\end_inset
+
+ = U[0,1] once again.
+ Both methods are flexible to the space of functions, though, as desired.
+\end_layout
+
+\end_body
+\end_document
