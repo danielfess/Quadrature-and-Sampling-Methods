@@ -1,4 +1,6 @@
-%Beta quadrature
+%Beta(0.5,0.5) measure, Sobolev space
+%weights computed using nonzero lambda
+%quadrature - univariate case
 
 tic
 

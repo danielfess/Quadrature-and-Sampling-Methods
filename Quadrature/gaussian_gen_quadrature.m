@@ -1,4 +1,6 @@
-%Gaussian quadrature - general dimension
+%Gaussian measure, SE kernel
+%weights computed using lambda=0
+%quadrature - general dimension
 
 tic
 figure(1); clf;
@@ -33,7 +35,7 @@ for j=1:itr %Each loop is approx ---- secs
     end
     h = sum(h,2); %Column vector length v, h(x(i)) = sum c_j*K(xi,yj)
     
-    %Mean embedding on y
+    %Mean embedding on y -- computed analytically
     mu_y = ((si2/(si2+t2))^(p/2))*exp(-sum(y.^2,1)/(2*(si2+t2))); %Row vector length r
 
     I = mu_y*c'; %Integral of h = sum mu(y_i)*c_i
@@ -44,19 +46,22 @@ for j=1:itr %Each loop is approx ---- secs
         K_x(i,:) = kernel(repmat(x(:,i),1,v),x);
     end
         
-    %Mean embedding on x:
+    %Mean embedding on x -- computed analytically
     mu_x = ((si2/(si2+t2))^(p/2))*exp(-sum(x.^2,1)/(2*(si2+t2))); %Row vector length v
     
+    %resampling methods - currently implemented with different choices of lambda
+    %should be changed		
     K1 = K_x*inv(K_x+eye(v)); %For resampling method, lambda = 1
     q1 = diag(K1)/trace(K1);
     
     K2 = K_x*inv(K_x+0.01*eye(v)); %For resampling method, lambda = 0.01
     q2 = diag(K2)/trace(K2);
     
-    L = decompose_kernel(K_x); %DPP
+    L = decompose_kernel(K_x); %DPP (function from Kulesza's package)
     
     for n=1:inc:200
-        %Kernel method
+        %Monte Carlo with appropriate weights
+	%this method simply draws from the underlying measure rho (called 'Gaussian' in the legend)
         rp = randperm(v);
         b = K_x(rp(1:n),rp(1:n))\mu_x(rp(1:n))'; %lambda=0 here, so no q
         A = h(rp(1:n))'*b; %Quadrature rule
